@@ -1,0 +1,32 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	width: 1200px;
+	margin: 0 auto;
+	font-size: 14px;
+}
+
+svg {
+  /*width: 800px;*/
+  /*height: 500px;*/
+}
+
+#charts .menu span {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#charts {
+  width: 1200px;
+}
+
+#charts .chart1 {
+  height: 450px;
+}
+
+#charts .chart2 {
+  height: 200px;
+}
+
+#charts .node text {
+  fill: white;
+}

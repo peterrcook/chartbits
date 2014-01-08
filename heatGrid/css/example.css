@@ -1,0 +1,24 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	width: 1200px;
+	margin: 0 auto;
+	font-size: 14px;
+}
+
+svg {
+  width: 1200px;
+  height: 3000px;
+}
+
+#chart {
+  width: 1200px;
+  overflow: scroll;
+}
+
+line {
+  stroke: black;
+}
+
+rect {
+  stroke: none;
+}
