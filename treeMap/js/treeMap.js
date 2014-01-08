@@ -3,8 +3,6 @@
 var animdata = window.animdata || {};
 window.animdata = animdata;
 
-animdata.d3 = {};
-
 animdata.d3 = animdata.d3 || {};
 animdata.d3.treeMap = function() {
 
@@ -16,7 +14,8 @@ animdata.d3.treeMap = function() {
     width: 200,
     height: 200,
     labels: true,
-    labelSize: 12,
+    labelPadding: 20,
+    labelDisplayThreshold: 150, // if area / num. chars > threshold, display the label
     padding: 0,
     value: function(d) {return d.size;}, // value function
     sticky: false,
@@ -43,24 +42,23 @@ animdata.d3.treeMap = function() {
   Chart building
   ----*/
   function constructChart() {
+    // We'll use div elements, as it's much easier to center the text
+    // e.g. http://stackoverflow.com/questions/9192389/css-single-or-multiple-line-vertical-align
     d3elements.treeMaps = d3elements.container
-      .selectAll('g.treemap')
+      .selectAll('div.treemap')
       .data(data)
       .enter()
-      .append('g')
-      .classed('treemap', true);
+      .append('div')
+      .classed('treemap', true)
+      .style('position', 'absolute');
   }
 
   function position() {
-    this.attr("x", function(d) { return d.x; })
-        .attr("y", function(d) { return d.y; })
-        .attr("width", function(d) { return d.dx - config.padding; })
-        .attr("height", function(d) { return d.dy - config.padding; });
-  }
-
-  function labelPosition(d, i) {
-    this.attr("x", function(d) { return d.x + 0.5 * d.dx; })
-        .attr("y", function(d) { return d.y + 0.5 * d.dy + 0.35 * config.labelSize; });
+    this.style('left', function(d) { return d.x + 'px'; })
+        .style('top', function(d) { return d.y + 'px'; })
+        .style('width', function(d) { return d.dx - config.padding - 2 * config.labelPadding + 'px'; })
+        .style('height', function(d) { return d.dy - config.padding - 2 * config.labelPadding + 'px'; })
+        .style('padding', config.labelPadding + 'px');
   }
 
 
@@ -70,35 +68,36 @@ animdata.d3.treeMap = function() {
   ----*/
   function updateTreeMap(d, i) {
     var u = d3.select(this)
-      .selectAll('g.node')
+      .selectAll('div.node')
       .data(treeMaps[i].nodes, function(d) {return d.name;});
 
-    var e = u.enter()
-      .append('g')
-      .classed('node', true);
+    var nodes = u.enter()
+      .append('div')
+      .classed('node', true)
 
-    e.append('rect');
-    if(config.labels)
-      e.append('text');
+    nodes
+      .append('p')
+      .style('display', 'table-cell')
+      .style('vertical-align', 'middle')
+      .style('text-align', 'center');
 
     u.exit()
       .remove();
 
-    u.select('g.node rect')
-      .style('display', function(d, i) {return i === 0 ? 'none' : 'block';})
-      .style('fill', function(d, i) {return config.color(d, i);})
+    u.style('display', function(d, i) {return i === 0 ? 'none' : 'table';})  // table used for text centering
+      .style('background-color', function(d, i) {return config.color(d, i);})
+      .style('position', 'absolute')
       .call(position);
-  }
 
-  function updateLabels(d, i) {
-    if(!config.labels) return;
-
-    d3.select(this)
-      .selectAll('g.node text')
-      .text(function(d) {return d.name;})
-      .style('text-anchor', 'middle')
-      .style('font-size', config.labelSize + 'px')
-      .call(labelPosition);
+    u.select('p')
+      .text(function(d) {
+        var area = (d.dx - config.padding - 2 * config.labelPadding) * (d.dy - config.padding - 2 * config.labelPadding);
+        var enoughSpace = false;
+        if(d.name !== undefined) {
+          enoughSpace = area / d.name.length > config.labelDisplayThreshold;
+        }
+        return config.labels && enoughSpace ? d.name : '';
+      });
   }
 
   function update() {
@@ -114,9 +113,6 @@ animdata.d3.treeMap = function() {
 
     d3elements.treeMaps
       .each(updateTreeMap);
-
-    d3elements.treeMaps
-      .each(updateLabels)
   }
 
 
@@ -155,7 +151,6 @@ animdata.d3.treeMap = function() {
       return chart;
     }
   });
-
 
   return chart;
 }

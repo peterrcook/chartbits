@@ -23,10 +23,10 @@
 
   var data2 = [
     {"children" : [
-       {"name": "a1", "size": 100, "type": "animal"},
-       {"name": "a2", "size": 100, "type": "vegetable"},
-       {"name": "a3", "size": 100, "type": "animal"},
-       {"name": "a4", "size": 100, "type": "mineral"},
+       {"name": "a1 - a very very very long label", "size": 100, "type": "animal"},
+       {"name": "a2 - a very very very long label", "size": 100, "type": "vegetable"},
+       {"name": "a3 - a very very very long label", "size": 100, "type": "animal"},
+       {"name": "a4 - a very very very long label", "size": 100, "type": "mineral"},
       ]
     },
     {"children" : [
@@ -62,22 +62,18 @@
     var treeMap = animdata.d3.treeMap()
       .color(function(d, i) {return colorScale(i);})
       .width(200)
-      .height(400)
-      .labels(true)
-      .labelSize(12);
+      .height(200)
+      .labels(true);
 
     var grid = d3.select('#charts .chart1')
-      .append('svg')
       .style('width', 600)
-      .style('height', 400)
-      .append('g')
-      .classed('heat-grid', true)
+      .style('height', 200)
       .datum(data1)
       .call(treeMap);
 
     grid
-      .selectAll('g.treemap')
-      .attr('transform', function(d, i) {return animdata.svg.translate(i * 250, 0);});
+      .selectAll('div.treemap')
+      .style('left', function(d, i) {return i * 250 + 'px';});
     }
 
   function construct2() {
@@ -105,17 +101,14 @@
       .width(scaledWidths)
       .height(height)
       .labels(true)
-      .labelSize(12)
+      .labelPadding(10)
       .padding(1)
       .color(function(d, i) {return colorMap[d.type];})
       .value(function(d) {return d.size;});
 
     var grid = d3.select('#charts .chart2')
-      .append('svg')
       .style('width', width)
       .style('height', height)
-      .append('g')
-      .classed('heat-grid', true)
       .datum(data2)
       .call(treeMap);
 
@@ -123,10 +116,10 @@
     _.each(scaledWidths, function(w) {
       xPositions.push(xPositions.slice(-1)[0] + w);
     });
-    // console.log(xPositions);
+
     grid
-      .selectAll('g.treemap')
-      .attr('transform', function(d, i) {return animdata.svg.translate(xPositions[i], 0);});
+      .selectAll('div.treemap')
+      .style('left', function(d, i) {return xPositions[i] + 'px';});
 
     d3.select('#charts .chart2 .menu .update')
       .on('click', function() {
@@ -134,16 +127,12 @@
           v.size = Math.random() * 100;
           return v;
         });
-        // console.log(data2[0].children);
-        d3.select('#charts .chart2 .heat-grid')
+        console.log(data2[0].children);
+        d3.select('#charts .chart2')
           .datum(data2)
           .call(treeMap);
       });
-
-
-
     }
-
 
 
   construct1();

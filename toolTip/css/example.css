@@ -1,0 +1,31 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	width: 1200px;
+	margin: 0 auto;
+	font-size: 14px;
+}
+
+#charts {
+  width: 1200px;
+}
+
+#charts .chart {
+  position: relative;
+}
+
+#charts .chart svg {
+  width: 1000px;
+  height: 600px;
+}
+
+#charts circle {
+  fill: indianred;
+}
+
+#charts .chart .tooltip {
+  width: 200px;
+  height: 200px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  background-color: white;
+}
