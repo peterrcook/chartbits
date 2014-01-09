@@ -66,8 +66,8 @@
       .labels(true);
 
     var grid = d3.select('#charts .chart1')
-      .style('width', 600)
-      .style('height', 200)
+      .style('width', '600px')
+      .style('height', '200px')
       .datum(data1)
       .call(treeMap);
 
@@ -101,14 +101,13 @@
       .width(scaledWidths)
       .height(height)
       .labels(true)
-      .labelPadding(10)
       .padding(1)
       .color(function(d, i) {return colorMap[d.type];})
       .value(function(d) {return d.size;});
 
     var grid = d3.select('#charts .chart2')
-      .style('width', width)
-      .style('height', height)
+      .style('width', width + 'px')
+      .style('height', height + 'px')
       .datum(data2)
       .call(treeMap);
 

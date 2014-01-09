@@ -14,7 +14,7 @@ animdata.d3.treeMap = function() {
     width: 200,
     height: 200,
     labels: true,
-    labelPadding: 20,
+    // labelPadding: 0, // disable for now - requires further thought with regards negative widths in position()
     labelDisplayThreshold: 150, // if area / num. chars > threshold, display the label
     padding: 0,
     value: function(d) {return d.size;}, // value function
@@ -56,9 +56,9 @@ animdata.d3.treeMap = function() {
   function position() {
     this.style('left', function(d) { return d.x + 'px'; })
         .style('top', function(d) { return d.y + 'px'; })
-        .style('width', function(d) { return d.dx - config.padding - 2 * config.labelPadding + 'px'; })
-        .style('height', function(d) { return d.dy - config.padding - 2 * config.labelPadding + 'px'; })
-        .style('padding', config.labelPadding + 'px');
+        .style('width', function(d) { return d.dx - config.padding + 'px'; })
+        .style('height', function(d) { return d.dy - config.padding + 'px'; })
+        // .style('padding', config.labelPadding + 'px');
   }
 
 
@@ -91,7 +91,7 @@ animdata.d3.treeMap = function() {
 
     u.select('p')
       .text(function(d) {
-        var area = (d.dx - config.padding - 2 * config.labelPadding) * (d.dy - config.padding - 2 * config.labelPadding);
+        var area = (d.dx - config.padding /*- 2 * config.labelPadding*/) * (d.dy - config.padding /*- 2 * config.labelPadding*/);
         var enoughSpace = false;
         if(d.name !== undefined) {
           enoughSpace = area / d.name.length > config.labelDisplayThreshold;
