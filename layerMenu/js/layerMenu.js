@@ -12,7 +12,8 @@ animdata.d3.layerMenu = function() {
   Configurable variables
   ----*/
   var config = {
-    items: []
+    items: [], // [{label: '', layerSelector: ''}]
+    transitionDuration: 500
   }
 
 
@@ -77,10 +78,24 @@ animdata.d3.layerMenu = function() {
   function update() {
     config.items.forEach(function(item) {
       var layer = item.layerSelector;
-      console.log(layer, uiState.selectedLayer);
-      d3.select(layer)
-        .transition()
-        .style('opacity', layer === uiState.selectedLayer ? 1 : 0)
+      var selected = layer === uiState.selectedLayer;
+
+      if(selected) {
+        d3.select(layer)
+          .style('display', 'block')
+          .transition()
+          .duration(config.transitionDuration)
+          .style('opacity', 1);
+      } else {
+        d3.select(layer)
+          .transition()
+          .duration(config.transitionDuration)
+          .style('opacity', 0)
+          .each('end', function() {
+            d3.select(this)
+              .style('display', 'none');
+          });
+      }
     });
 
     // update menu
