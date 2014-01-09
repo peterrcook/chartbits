@@ -14,7 +14,9 @@ animdata.d3.toolTip = function() {
   var config = {
     elements: '',
     offset: {x: 10, y: 10},
-    template: ''
+    template: null,
+    title: null, // if no template specified, defines the title. If not a data property, display the string
+    fields: null, // if no template specified, list the specified fields
   }
 
 
@@ -49,7 +51,8 @@ animdata.d3.toolTip = function() {
       .style('cursor', 'pointer');
 
     // Compile template
-    template = _.template(config.template);
+    if(config.template)
+      template = _.template(config.template);
   }
 
   /*----
@@ -92,7 +95,7 @@ animdata.d3.toolTip = function() {
       .on('mouseout', function() {
         d3elements.tooltip
           .transition()
-         .style('opacity', '0');
+          .style('opacity', '0');
         uiState.hoverElement = null;
       });
   }
@@ -109,10 +112,41 @@ animdata.d3.toolTip = function() {
   }
 
   function updateContent() {
-    var d = uiState.hoverElement.datum();
+    var datum = uiState.hoverElement.datum();
 
-    d3elements.tooltip
-      .html(template(d));
+    d3elements.tooltip.html('');
+
+    if(template) {
+      d3elements.tooltip
+        .html(template(datum));
+    } else {
+      var dMap = d3.map(datum);
+
+      // Title
+      var title = config.title;
+
+      if(dMap.has(config.title))
+        title = datum[config.title];
+
+      d3elements.tooltip
+        .append('h1')
+        .text(title);
+
+      // Table of data
+      if(config.fields) {
+        var rows = d3elements.tooltip
+          .append('table')
+          .selectAll('tr')
+          .data(config.fields)
+          .enter()
+          .append('tr');
+
+        rows.append('td')
+          .text(function(d) {return d;});
+        rows.append('td')
+          .text(function(d) {return datum[d];});
+      }
+    }
   }
 
 

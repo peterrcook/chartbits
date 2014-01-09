@@ -6,16 +6,18 @@ body {
 }
 
 #charts {
-  width: 1200px;
+  width: 700px;
 }
 
 #charts .chart {
   position: relative;
+  border: 1px solid #eee;
+  margin: 10px;
 }
 
 #charts .chart svg {
-  width: 1000px;
-  height: 600px;
+  width: 600px;
+  height: 300px;
 }
 
 #charts circle {
@@ -26,6 +28,17 @@ body {
   width: 200px;
   height: 200px;
   padding: 5px;
+  font-size: 12px;
   border: 1px solid #ddd;
   background-color: white;
+}
+
+#charts .tooltip h1 {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#charts .tooltip td {
+  width: 80px;
 }
