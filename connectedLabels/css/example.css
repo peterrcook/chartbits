@@ -1,0 +1,30 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	width: 1200px;
+	margin: 0 auto;
+	font-size: 14px;
+}
+
+#charts .menu span {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#charts .container, #charts .layer {
+  width: 1000px;
+  height: 200px;
+}
+
+#charts .chart3.container, #charts .chart3 .layer, #charts .chart4.container, #charts .chart4 .layer {
+  height: 350px;
+}
+
+#charts .chart {
+  position: relative;
+}
+
+/* Connectors */
+path.connector {
+  stroke: #aaa;
+  width: 1px;
+}
