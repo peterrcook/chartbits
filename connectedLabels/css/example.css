@@ -10,13 +10,9 @@ body {
   cursor: pointer;
 }
 
-#charts .container, #charts .layer {
+#charts .container, #charts svg {
   width: 1000px;
   height: 200px;
-}
-
-#charts .chart3.container, #charts .chart3 .layer, #charts .chart4.container, #charts .chart4 .layer {
-  height: 350px;
 }
 
 #charts .chart {
@@ -31,18 +27,18 @@ path.connector {
 
 
 /* colors */
-#charts .chart1 .labels span.male {
+#charts .chart1 .label-group span.male {
   color: #aaa;
 }
-#charts .chart1 .labels span.female {
+#charts .chart1 .label-group span.female {
   color: lightgreen;
 }
 
 /* Hovering */
-#charts .chart1 .labels .label-group span {
+#charts .chart1 .label-group span {
   cursor: pointer;
 }
-#charts .chart1 .labels .label-group span.hover {
+#charts .chart1 .label-group span.hover {
   color: indianred;
 }
 #charts .chart1 svg path.label-group.hover {

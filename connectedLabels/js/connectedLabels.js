@@ -10,7 +10,7 @@ animdata.d3.connectedLabels = function() {
   Configurable variables
   ----*/
   var config = {
-    connectorSide: 'left',  // the side of the labels the connector emanates from
+    // connectorSide: 'left',  // the side of the labels the connector emanates from
     fontSize: 12,
     position: {x: 0, y: 0},  // the position of the labels relative to the container
     labelWidth: 200
@@ -26,7 +26,7 @@ animdata.d3.connectedLabels = function() {
   var d3elements = {
     container: null,
     groups: null,
-    svgLayer: null,
+    svg: null,
     divLayer: null,
     labelContainer: null,
   }
@@ -58,8 +58,8 @@ animdata.d3.connectedLabels = function() {
   function init(selection) {
     // To make things simpler, we assume just one element in the selection
     d3elements.container = d3.select(selection[0][0]);
-    d3elements.divLayer = d3elements.container.select('div.layer');
-    d3elements.svgLayer = d3elements.container.select('svg.layer');
+    // d3elements.divLayer = d3elements.container.select('div.layer');
+    d3elements.svg = d3elements.container.select('svg');
 
     data = d3elements.container.datum();
   }
@@ -67,15 +67,8 @@ animdata.d3.connectedLabels = function() {
   /*----
   Chart building
   ----*/
-  function constructChart() {
-    d3elements.labelContainer = d3elements.divLayer
-      .append('div')
-      .classed('labels', true)
-      .style('position', 'absolute')
-      .style('width', config.labelWidth + 'px')
-      .style('left', config.connectorSide === 'left' ? config.position.x + 'px' : config.position.x - config.labelWidth + 'px')
-      .style('top', config.position.y + 'px')
-  }
+  // function constructChart() {
+  // }
 
 
 
@@ -83,22 +76,28 @@ animdata.d3.connectedLabels = function() {
   Update
   ----*/
   function connectorPath(d, i) {
-    var labelY = config.position.y + (i + 0.5) * (config.fontSize + 4);
-    p = animdata.svg.pathAbsMove(config.position.x, labelY);
-    p += animdata.svg.pathAbsLine(d.position.x, labelY);
+    // var labelY = config.position.y + (i + 0.5) * (config.fontSize + 4);
+    p = animdata.svg.pathAbsMove(d.labelPosition.x, d.labelPosition.y);
+    p += animdata.svg.pathAbsLine(d.position.x, d.labelPosition.y);
     p += animdata.svg.pathAbsLine(d.position.x, d.position.y);
     return p;
   }
 
   function update() {
-    var labelGroups = d3elements.labelContainer
+    var containerWidth = +d3elements.container
+      .style('width')
+      .replace('px', '');
+
+    var labelGroups = d3elements.container
       .selectAll('div.label-group')
-      .data(function(d) {return d;})
+      .data(data)
       .enter()
       .append('div')
       .style('position', 'absolute')
-      .style('right', config.connectorSide === 'right' ? 0 : null)
-      .style('top', function(d, i) {return i * (config.fontSize + 4) + 'px';})
+      // .style('right', config.connectorSide === 'right' ? 0 : null)
+      .style('left', function(d) {return d.connectorSide === 'left' ? d.labelPosition.x + 'px' : null;})
+      .style('right', function(d) {return d.connectorSide === 'right' ? containerWidth - d.labelPosition.x + 'px' : null;})
+      .style('top', function(d) {return d.labelPosition.y - 0.5 * config.fontSize + 'px';})
       .style('font-size', config.fontSize + 'px')
       .attr('class', function(d, i) {return 'label-group group-'+i;});
 
@@ -110,7 +109,7 @@ animdata.d3.connectedLabels = function() {
       .selectAll('span')
       .data(function(d) {return d.labels;});
 
-    d3elements.svgLayer
+    d3elements.svg
       .selectAll('path.connector')
       .data(function(d) {return d;})
       .enter()
@@ -142,9 +141,9 @@ animdata.d3.connectedLabels = function() {
     // console.log(data);
 
     // Construct the chart if this is first call
-    if(!constructed) {
-      constructChart();
-    }
+    // if(!constructed) {
+    //   constructChart();
+    // }
 
     update();
 
