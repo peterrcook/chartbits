@@ -28,3 +28,28 @@ path.connector {
   stroke: #aaa;
   width: 1px;
 }
+
+
+/* colors */
+#charts .chart1 .labels span.male {
+  color: #aaa;
+}
+#charts .chart1 .labels span.female {
+  color: lightgreen;
+}
+
+/* Hovering */
+#charts .chart1 .labels .label-group span {
+  cursor: pointer;
+}
+#charts .chart1 .labels .label-group span.hover {
+  color: indianred;
+}
+#charts .chart1 svg path.label-group.hover {
+  stroke: indianred;
+}
+#charts .chart1 svg g.points circle.hover {
+  stroke: indianred;
+  fill: indianred;
+} 
+}

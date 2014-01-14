@@ -35,14 +35,34 @@ animdata.d3.connectedLabels = function() {
   /*-----
   Helpers
   -----*/
-  function labelList(l) {
-    l = _.map(l, function(v) {
-      return '<span class="label-'+v+'">' + v + '</span>';
+  function labelList(d) {
+    var i = -1;
+    l = _.map(d.labels, function(v) {
+      i++;
+      var ret = '';
+      if(d.classes)
+        ret = '<span class="label '+ d.classes[i] +'">' + v + '</span>';
+      else
+        ret = '<span class="label">' + v + '</span>';
+      return ret;
     });
     l = l.join(', ');
     return l;
   }
 
+
+
+  /*--
+  Init
+  --*/
+  function init(selection) {
+    // To make things simpler, we assume just one element in the selection
+    d3elements.container = d3.select(selection[0][0]);
+    d3elements.divLayer = d3elements.container.select('div.layer');
+    d3elements.svgLayer = d3elements.container.select('svg.layer');
+
+    data = d3elements.container.datum();
+  }
 
   /*----
   Chart building
@@ -54,7 +74,6 @@ animdata.d3.connectedLabels = function() {
       .style('position', 'absolute')
       .style('width', config.labelWidth + 'px')
       .style('left', config.connectorSide === 'left' ? config.position.x + 'px' : config.position.x - config.labelWidth + 'px')
-      // .style('text-align', config.connectorSide === 'left' ? 'left' : 'right')
       .style('top', config.position.y + 'px')
   }
 
@@ -81,26 +100,34 @@ animdata.d3.connectedLabels = function() {
       .style('right', config.connectorSide === 'right' ? 0 : null)
       .style('top', function(d, i) {return i * (config.fontSize + 4) + 'px';})
       .style('font-size', config.fontSize + 'px')
-      .attr('class', function(d, i) {return 'label-group group-'+i;})
-      // .classed('label-group', true);
+      .attr('class', function(d, i) {return 'label-group group-'+i;});
 
     labelGroups
-      .html(function(d) {return labelList(d.labels);});
+      .html(function(d) {return labelList(d);});
+
+    // Attach label data to span elements - a bit unorthodox, but allows us to comma-separate
+    labelGroups
+      .selectAll('span')
+      .data(function(d) {return d.labels;});
 
     d3elements.svgLayer
       .selectAll('path.connector')
       .data(function(d) {return d;})
       .enter()
       .append('path')
+      .attr('class', function(d, i) {
+        var classes = [];
+        classes.push('label-group');
+        classes.push('group-'+i);
+
+        if(d.classes)
+          classes = _.union(classes, d.classes);
+
+        return classes.join(' ');
+      })
       .classed('connector', true)
       .style('fill', 'none')
       .attr('d', connectorPath);
-
-    // d3elements.points
-    //   .attr('r', config.pointRadius)
-    //   .attr('cx', function(d) {return config.majorRadius * Math.sin(degToRad(d));})
-    //   .attr('cy', function(d) {return -config.majorRadius * Math.cos(degToRad(d));})
-    //   .style('opacity', function(d, i) {return 1 - (config.fadeRate * i);});
   }
 
 
@@ -111,13 +138,7 @@ animdata.d3.connectedLabels = function() {
   function chart(selection) {
     // console.log('selection', selection);
 
-    // To make things simpler, we assume just one element in the selection
-    d3elements.container = d3.select(selection[0][0]);
-    d3elements.divLayer = d3elements.container.select('div.layer');
-    d3elements.svgLayer = d3elements.container.select('svg.layer');
-
-    data = d3elements.container.datum();
-
+    init(selection);
     // console.log(data);
 
     // Construct the chart if this is first call
