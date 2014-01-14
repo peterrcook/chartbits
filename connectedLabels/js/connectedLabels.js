@@ -13,7 +13,8 @@ animdata.d3.connectedLabels = function() {
     // connectorSide: 'left',  // the side of the labels the connector emanates from
     fontSize: 12,
     position: {x: 0, y: 0},  // the position of the labels relative to the container
-    labelWidth: 200
+    // labelWidth: 200,
+    connectorContainer: null // svg group for the connectors
   }
 
 
@@ -59,7 +60,7 @@ animdata.d3.connectedLabels = function() {
     // To make things simpler, we assume just one element in the selection
     d3elements.container = d3.select(selection[0][0]);
     // d3elements.divLayer = d3elements.container.select('div.layer');
-    d3elements.svg = d3elements.container.select('svg');
+    d3elements.svg = d3elements.container.select(config.connectorContainer);
 
     data = d3elements.container.datum();
   }

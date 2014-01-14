@@ -38,13 +38,6 @@
 
   // Construction
   function construct1() {
-    var connectedLabels = animdata.d3.connectedLabels()
-      .fontSize(12);
-
-    d3.select('#charts .chart1')
-      .datum(data1)
-      .call(connectedLabels);
-
     d3.select('#charts .chart1 svg')
       .append('g')
       .classed('points', true)
@@ -62,6 +55,14 @@
         }
         return '';
       });
+
+    var connectedLabels = animdata.d3.connectedLabels()
+      .connectorContainer('g.connectors')
+      .fontSize(12);
+
+    d3.select('#charts .chart1')
+      .datum(data1)
+      .call(connectedLabels);
 
     // Set up some basic hovering
     d3.selectAll('#charts .chart1 .label')
