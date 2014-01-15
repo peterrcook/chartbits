@@ -14,7 +14,8 @@ animdata.d3.connectedLabels = function() {
     fontSize: 12,
     position: {x: 0, y: 0},  // the position of the labels relative to the container
     // labelWidth: 200,
-    connectorContainer: null // svg group for the connectors
+    connectorContainer: null, // svg group for the connectors
+    classed: null  // class assigned to all connectors and label-groups
   }
 
 
@@ -36,20 +37,43 @@ animdata.d3.connectedLabels = function() {
   /*-----
   Helpers
   -----*/
+  // function labelList(d) {
+  //   var i = -1;
+  //   l = _.map(d.labels, function(v) {
+  //     i++;
+  //     var ret = '';
+  //     if(d.classes)
+  //       ret = '<span class="label '+ d.classes[i] +'">' + v + '</span>';
+  //     else
+  //       ret = '<span class="label">' + v + '</span>';
+  //     return ret;
+  //   });
+  //   l = l.join(', ');
+  //   return l;
+  // }
+
   function labelList(d) {
-    var i = -1;
-    l = _.map(d.labels, function(v) {
-      i++;
-      var ret = '';
-      if(d.classes)
-        ret = '<span class="label '+ d.classes[i] +'">' + v + '</span>';
-      else
-        ret = '<span class="label">' + v + '</span>';
-      return ret;
-    });
-    l = l.join(', ');
-    return l;
-  }
+    // Use nested spans to allow for comma... is there a nicer way to do this?
+    var wrapper = d3.select(this)
+      .selectAll('span.label')
+      .data(function(d) {return d.labels;})
+      .enter()
+      .append('span');
+
+    wrapper
+      .append('span')
+      .attr('class', function(dd, i) {
+        if(d.classes)
+          return d.classes[i];
+        return '';
+      })
+      .classed('label', true)
+      .text(function(d) {return d;});
+
+    wrapper
+      .append('span')
+      .text(', ');
+  }  
 
 
 
@@ -100,15 +124,23 @@ animdata.d3.connectedLabels = function() {
       .style('right', function(d) {return d.connectorSide === 'right' ? containerWidth - d.labelPosition.x + 'px' : null;})
       .style('top', function(d) {return d.labelPosition.y - 0.5 * config.fontSize + 'px';})
       .style('font-size', config.fontSize + 'px')
-      .attr('class', function(d, i) {return 'label-group group-'+i;});
+      .attr('class', function(d, i) {return 'label-group group-'+i;})
+      .classed(config.classed, true);
 
     labelGroups
-      .html(function(d) {return labelList(d);});
+      .each(labelList);
+
+    // Remove the comma - a bit hacky :(
+    labelGroups
+      .selectAll('span:last-child span:last-child')
+      .remove();
+
+      // .html(function(d) {return labelList(d);});
 
     // Attach label data to span elements - a bit unorthodox, but allows us to comma-separate
-    labelGroups
-      .selectAll('span')
-      .data(function(d) {return d.labels;});
+    // labelGroups
+    //   .selectAll('span')
+    //   .data(function(d) {return d.labels;});
 
     d3elements.svg
       .selectAll('path.connector')
@@ -126,6 +158,7 @@ animdata.d3.connectedLabels = function() {
         return classes.join(' ');
       })
       .classed('connector', true)
+      .classed(config.classed, true)
       .style('fill', 'none')
       .attr('d', connectorPath);
   }

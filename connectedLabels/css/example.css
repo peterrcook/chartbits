@@ -38,7 +38,7 @@ path.connector {
 #charts .chart1 .label-group span {
   cursor: pointer;
 }
-#charts .chart1 .label-group span.hover {
+#charts .chart1 .label-group span.label.hover {
   color: indianred;
 }
 #charts .chart1 svg path.label-group.hover {

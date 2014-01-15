@@ -57,6 +57,7 @@
       });
 
     var connectedLabels = animdata.d3.connectedLabels()
+      .classed('all')
       .connectorContainer('g.connectors')
       .fontSize(12);
 
