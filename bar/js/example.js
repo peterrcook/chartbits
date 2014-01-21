@@ -36,7 +36,7 @@
 
 
   function chart2() {
-    var data1 = [4, 1, -7, 5, -1, 5];
+    var data1 = [4, 1, -7, 5, -1, 'na', 5];
     var transform = {x: 0, y: 15};
     var bar = animdata.d3.bar()
       .barWidth(10)

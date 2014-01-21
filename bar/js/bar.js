@@ -58,10 +58,12 @@ animdata.d3.bar = function() {
       var x = i * config.transform.x;
       var y = i * config.transform.y;
       var width = 0;
-      if(scale)
-        width = Math.abs(scale(d));
-      else if(scales)
-        width = Math.abs(scales[i](d));
+      if(!isNaN(d)) {
+        if(scale)
+          width = Math.abs(scale(d));
+        else if(scales)
+          width = Math.abs(scales[i](d));
+      }
 
       if(d < 0)
         x -= width;
@@ -84,8 +86,6 @@ animdata.d3.bar = function() {
       scales = _.map(config.domains, function(d) {
         return d3.scale.linear().domain(d).range(config.range);
       });
-
-    console.log(scale, scales); 
 
     var u = d3elements.container
       .selectAll('rect')
