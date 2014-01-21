@@ -14,8 +14,7 @@ animdata.d3.connectedLabels = function() {
     fontSize: 12,
     position: {x: 0, y: 0},  // the position of the labels relative to the container
     // labelWidth: 200,
-    connectorContainer: null, // svg group for the connectors
-    classed: null  // class assigned to all connectors and label-groups
+    connectorContainer: null // svg group for the connectors
   }
 
 
@@ -124,8 +123,7 @@ animdata.d3.connectedLabels = function() {
       .style('right', function(d) {return d.connectorSide === 'right' ? containerWidth - d.labelPosition.x + 'px' : null;})
       .style('top', function(d) {return d.labelPosition.y - 0.5 * config.fontSize + 'px';})
       .style('font-size', config.fontSize + 'px')
-      .attr('class', function(d, i) {return 'label-group group-'+i;})
-      .classed(config.classed, true);
+      .attr('class', function(d, i) {return 'label-group group-'+i;});
 
     labelGroups
       .each(labelList);
@@ -158,7 +156,6 @@ animdata.d3.connectedLabels = function() {
         return classes.join(' ');
       })
       .classed('connector', true)
-      .classed(config.classed, true)
       .style('fill', 'none')
       .attr('d', connectorPath);
   }
