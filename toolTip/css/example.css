@@ -24,6 +24,10 @@ body {
   fill: indianred;
 }
 
+#charts rect {
+  fill: steelblue;
+}
+
 #charts .chart .tooltip {
   width: 200px;
   height: 200px;

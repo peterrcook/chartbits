@@ -67,7 +67,74 @@
       .call(toolTip);
   }
 
+  function construct3() {
+    var data1 = [];
+    var data2 = [];
+    var width = 500;
+    var height = 300;
+
+    for(var i=0; i<10; i++) {
+      data1.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 50,
+        data1: Math.random() * 50,
+        data2: Math.random() * 50,
+        data3: Math.random() * 50,
+      });
+    }
+
+    d3.select('#charts .chart3 svg')
+      .selectAll('circle')
+      .data(data1)
+      .enter()
+      .append('circle')
+      .attr('cx', function(d) {return d.x;})
+      .attr('cy', function(d) {return d.y;})
+      .attr('r', function(d) {return d.r;});
+
+
+    for(var i=0; i<10; i++) {
+      data2.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 50,
+        data1: Math.random() * 50,
+        data2: Math.random() * 50,
+        data3: Math.random() * 50,
+      });
+    }
+
+    d3.select('#charts .chart3 svg')
+      .selectAll('rect')
+      .data(data2)
+      .enter()
+      .append('rect')
+      .attr('x', function(d) {return d.x;})
+      .attr('y', function(d) {return d.y;})
+      .attr('width', function(d) {return d.r;})
+      .attr('height', function(d) {return d.r;});
+
+    var toolTip1 = animdata.d3.toolTip()
+      .title('This is a circle')
+      .fields(['data1', 'data2', 'data3'])
+      .elements('circle');
+
+    d3.select('#charts .chart3')
+      .call(toolTip1);
+
+    var toolTip2 = animdata.d3.toolTip()
+      .title('This is a square')
+      .fields(['data1', 'data2'])
+      .elements('rect');
+
+    d3.select('#charts .chart3')
+      .call(toolTip2);
+
+  }
+
 
   construct1();
   construct2();
+  construct3();
 })();

@@ -50,6 +50,12 @@ animdata.d3.toolTip = function() {
     d3elements.elements
       .style('cursor', 'pointer');
 
+    d3elements.tooltip = d3elements.container
+      .select('div.tooltip');
+
+    if(d3elements.tooltip[0][0] === null)
+      constructTooltip();
+
     // Compile template
     if(config.template)
       template = _.template(config.template);
@@ -67,13 +73,13 @@ animdata.d3.toolTip = function() {
       .style('pointer-events', 'none');
   }
 
-  function construct() {
-    constructTooltip();
-  }
+  // function construct() {
+  //   constructTooltip();
+  // }
 
   function addEvents() {
     d3elements.container
-      .on('mousemove', function(d) {
+      .on('mousemove.tooltipComponent', function(d) {
         // if(uiState.hoverElement === null)
         //   return;
 
@@ -85,14 +91,14 @@ animdata.d3.toolTip = function() {
       });
 
     d3elements.elements
-      .on('mouseover', function(d) {
+      .on('mouseover.tooltipComponent', function(d) {
         uiState.hoverElement = d3.select(this);
         d3elements.tooltip
           .transition()
          .style('opacity', '1');
         updateContent();
       })
-      .on('mouseout', function() {
+      .on('mouseout.tooltipComponent', function() {
         d3elements.tooltip
           .transition()
           .style('opacity', '0');
@@ -157,8 +163,7 @@ animdata.d3.toolTip = function() {
     init(s);
 
     // console.log('selection', d3elements.container);
-
-    construct();
+    // construct();
     addEvents();
   }
 
