@@ -1,3 +1,4 @@
+/* (C) 2014 Peter Cook */
 (function() {
 
 var animdata = window.animdata || {};
@@ -13,8 +14,9 @@ animdata.d3.bar = function() {
     barWidth: 10,
     transform: {x: 11, y: 0},
     orientation: 'vertical',
-    domain: [0, 10],
-    range: [0, 100]
+    domain: null,
+    domains: null,  // allows different domain for each data point
+    range: [-50, 50]
   }
 
 
@@ -25,6 +27,7 @@ animdata.d3.bar = function() {
   var data = null;
   var constructed = false;
   var scale = null;
+  var scales = null;
 
   var d3elements = {
     container: null,
@@ -54,7 +57,12 @@ animdata.d3.bar = function() {
     if(config.orientation === 'horizontal') {
       var x = i * config.transform.x;
       var y = i * config.transform.y;
-      var width = Math.abs(scale(d));
+      var width = 0;
+      if(scale)
+        width = Math.abs(scale(d));
+      else if(scales)
+        width = Math.abs(scales[i](d));
+
       if(d < 0)
         x -= width;
     } else {
@@ -69,7 +77,15 @@ animdata.d3.bar = function() {
   }
 
   function update() {
-    scale = d3.scale.linear().domain(config.domain).range(config.range);
+
+    if(config.domain)
+      scale = d3.scale.linear().domain(config.domain).range(config.range);
+    else if(config.domains)
+      scales = _.map(config.domains, function(d) {
+        return d3.scale.linear().domain(d).range(config.range);
+      });
+
+    console.log(scale, scales); 
 
     var u = d3elements.container
       .selectAll('rect')

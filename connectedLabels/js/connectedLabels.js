@@ -1,3 +1,5 @@
+/* (C) 2014 Peter Cook */
+
 (function() {
 
 var animdata = window.animdata || {};

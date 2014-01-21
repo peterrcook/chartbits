@@ -1,11 +1,12 @@
 (function(){
 
   function chart1() {
-    var data1 = [4, 1, -7, 5, -1, 5];
+    var data1 = [4, 1, -7, 5000, -1000, 5000];
     var transform = {x: 110, y: 0};
     var bar = animdata.d3.bar()
       .barWidth(10)
-      .domain([-10, 10])
+      // .domain([-10, 10])
+      .domains([[-10, 10], [-10, 10], [-10, 10], [-5000, 5000], [-5000, 5000], [-5000, 5000]])
       .range([-50, 50])
       .orientation('horizontal')
       .transform(transform);
