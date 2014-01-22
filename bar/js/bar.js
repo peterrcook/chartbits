@@ -11,7 +11,7 @@ animdata.d3.bar = function() {
   Configurable variables
   ----*/
   var config = {
-    accessor: function(d) {return d;},
+    datumAccessor: function(d) {return d;},
     barWidth: 10,
     transform: {x: 11, y: 0},
     orientation: 'vertical',
@@ -55,7 +55,7 @@ animdata.d3.bar = function() {
   Chart update (D3 stuff)
   ----*/
   function barGeometry(d, i) {
-    d = config.accessor(d);
+    // d = config.accessor(d);
     if(config.orientation === 'horizontal') {
       var x = i * config.transform.x;
       var y = i * config.transform.y;
@@ -110,7 +110,7 @@ animdata.d3.bar = function() {
   function chart(selection) {
     // To make things simpler, we assume just one element in the selection
     d3elements.container = d3.select(selection[0][0]);
-    data = d3elements.container.datum();
+    data = config.datumAccessor(d3elements.container.datum());
 
     // console.log(data);
 

@@ -36,10 +36,10 @@
 
 
   function chart2() {
-      var data1 = [{v: 4}, {v: 1}, {v: -7}, {v: 5}, {v: -1}, {v: 'na'}, {v: 5}];
+    var data1 = {d: [4, 1, -7, 5, -1, 5]};
     var transform = {x: 0, y: 15};
     var bar = animdata.d3.bar()
-      .accessor(function(d) {return d.v})
+      .datumAccessor(function(d) {return d.d;})
       .barWidth(10)
       .domain([-10, 10])
       .range([-50, 50])
