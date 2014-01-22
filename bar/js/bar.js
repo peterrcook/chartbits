@@ -11,6 +11,7 @@ animdata.d3.bar = function() {
   Configurable variables
   ----*/
   var config = {
+    accessor: function(d) {return d;},
     barWidth: 10,
     transform: {x: 11, y: 0},
     orientation: 'vertical',
@@ -54,6 +55,7 @@ animdata.d3.bar = function() {
   Chart update (D3 stuff)
   ----*/
   function barGeometry(d, i) {
+    d = config.accessor(d);
     if(config.orientation === 'horizontal') {
       var x = i * config.transform.x;
       var y = i * config.transform.y;
