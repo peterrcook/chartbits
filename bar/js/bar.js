@@ -17,7 +17,9 @@ animdata.d3.bar = function() {
     orientation: 'vertical',
     domain: null,
     domains: null,  // allows different domain for each data point
-    range: [-50, 50]
+    range: [-50, 50],
+    showValues: false,
+    valueLabelSize: 10
   }
 
 
@@ -80,6 +82,20 @@ animdata.d3.bar = function() {
       .attr('height', config.barWidth);
   }
 
+  function valueLabelGeometry(d, i) {
+    // d = config.accessor(d);
+    if(config.orientation === 'horizontal') {
+      var x = i * config.transform.x + 4;
+      var y = i * config.transform.y + 0.5 * (config.barWidth + 0.8 * config.valueLabelSize);
+    } else {
+
+    }
+
+    d3.select(this)
+      .attr('x', x)
+      .attr('y', y);
+  }
+
   function update() {
 
     if(config.domain)
@@ -100,8 +116,26 @@ animdata.d3.bar = function() {
       .remove();
 
     u.each(barGeometry);
+
+    if(config.showValues)
+      updateValueLabels();
   }
 
+  function updateValueLabels() {
+   var u = d3elements.container
+      .selectAll('text')
+      .data(data);
+
+    u.enter()
+      .append('text')
+      .style('font-size', config.valueLabelSize)
+      .text(function(d) {return d;});
+
+    u.exit()
+      .remove();
+
+    u.each(valueLabelGeometry);
+  }
 
 
   /*----
