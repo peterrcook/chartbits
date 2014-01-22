@@ -85,8 +85,14 @@ animdata.d3.bar = function() {
   function valueLabelGeometry(d, i) {
     // d = config.accessor(d);
     if(config.orientation === 'horizontal') {
-      var x = i * config.transform.x + 4;
+      var x = i * config.transform.x + 3;
       var y = i * config.transform.y + 0.5 * (config.barWidth + 0.8 * config.valueLabelSize);
+      if(!isNaN(d) && d > 0) {
+        if(scale)
+          x += Math.abs(scale(d));
+        else if(scales)
+          x += Math.abs(scales[i](d));
+      }
     } else {
 
     }
@@ -123,11 +129,12 @@ animdata.d3.bar = function() {
 
   function updateValueLabels() {
    var u = d3elements.container
-      .selectAll('text')
+      .selectAll('text.value-label')
       .data(data);
 
     u.enter()
       .append('text')
+      .classed('value-label', true)
       .style('font-size', config.valueLabelSize)
       .text(function(d) {return d;});
 
