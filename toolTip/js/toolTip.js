@@ -17,6 +17,8 @@ animdata.d3.toolTip = function() {
     template: null,
     title: null, // if no template specified, defines the title. If not a data property, display the string
     fields: null, // if no template specified, list the specified fields
+    freezeOnClick: false,
+    allowPointerEvents: false
   }
 
 
@@ -32,7 +34,8 @@ animdata.d3.toolTip = function() {
 
   var uiState = {
     position: {x: 0, y: 0},
-    hoverElement: null // the element being hovered over
+    hoverElement: null, // the element being hovered over
+    frozen: false, // indicates whether the tooltip is frozen
   }
 
   var template = null;
@@ -70,7 +73,7 @@ animdata.d3.toolTip = function() {
       .classed('tooltip', true)
       .style('position', 'absolute')
       .style('opacity', '0')
-      .style('pointer-events', 'none');
+      .style('pointer-events', config.allowPointerEvents);
   }
 
   // function construct() {
@@ -82,16 +85,16 @@ animdata.d3.toolTip = function() {
       .on('mousemove.tooltipComponent', function(d) {
         // if(uiState.hoverElement === null)
         //   return;
-
-        var pos = d3.mouse(d3elements.container[0][0]);
-        uiState.position.x = pos[0] + config.offset.x;
-        uiState.position.y = pos[1] + config.offset.y;
+        if(uiState.frozen)
+          return;
 
         updatePosition();
       });
 
     d3elements.elements
       .on('mouseover.tooltipComponent', function(d) {
+        if(uiState.frozen)
+          return;
         uiState.hoverElement = d3.select(this);
         d3elements.tooltip
           .transition()
@@ -99,10 +102,32 @@ animdata.d3.toolTip = function() {
         updateContent();
       })
       .on('mouseout.tooltipComponent', function() {
+        if(uiState.frozen)
+          return;
         d3elements.tooltip
           .transition()
           .style('opacity', '0');
         uiState.hoverElement = null;
+      })
+      .on('click.tooltipComponent', function(d) {
+        if(!config.freezeOnClick)
+          return;
+
+        if(uiState.frozen && d3.select(this).classed('tooltip-selected')) {
+          uiState.hoverElement.classed('tooltip-selected', false);
+          uiState.frozen = false;
+          return;
+        }
+        uiState.frozen = true;
+
+        if(uiState.hoverElement !== null)
+          uiState.hoverElement.classed('tooltip-selected', false);
+
+        uiState.hoverElement = d3.select(this);
+        uiState.hoverElement
+          .classed('tooltip-selected', true);
+        updatePosition();
+        updateContent();
       });
   }
 
@@ -112,6 +137,10 @@ animdata.d3.toolTip = function() {
   Update
   ----*/
   function updatePosition() {
+    var pos = d3.mouse(d3elements.container[0][0]);
+    uiState.position.x = pos[0] + config.offset.x;
+    uiState.position.y = pos[1] + config.offset.y;
+
     d3elements.tooltip
       .style('left', uiState.position.x + 'px')
       .style('top', uiState.position.y + 'px');

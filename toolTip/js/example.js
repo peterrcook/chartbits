@@ -25,6 +25,7 @@
 
     var toolTip = animdata.d3.toolTip()
       .template('<h1>Circle</h1><div>x: <%= x %></div><div>y: <%= y %></div><div>r: <%= r %></div>')
+      .freezeOnClick(true)
       .elements('circle');
 
     d3.select('#charts .chart1')
