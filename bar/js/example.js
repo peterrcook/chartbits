@@ -45,7 +45,8 @@
       .domain([-10, 10])
       .range([-50, 50])
       .orientation('horizontal')
-      .transform(transform);
+      .transform(transform)
+      .signColors(['red', 'green']);
 
     var container = d3.select('#chart2')
       .append('svg')

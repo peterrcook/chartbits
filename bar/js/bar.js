@@ -19,7 +19,8 @@ animdata.d3.bar = function() {
     domains: null,  // allows different domain for each data point
     range: [-50, 50],
     showValues: false,
-    valueLabelSize: 10
+    valueLabelSize: 10,
+    signColors: null, // colour -ve and +ve differently e.g. ['red', 'green']
   }
 
 
@@ -87,12 +88,12 @@ animdata.d3.bar = function() {
     if(config.orientation === 'horizontal') {
       var x = i * config.transform.x + 3;
       var y = i * config.transform.y + 0.5 * (config.barWidth + 0.8 * config.valueLabelSize);
-      if(!isNaN(d) && d > 0) {
-        if(scale)
-          x += Math.abs(scale(d));
-        else if(scales)
-          x += Math.abs(scales[i](d));
-      }
+      // if(!isNaN(d) && d > 0) {
+      //   if(scale)
+      //     x += Math.abs(scale(d));
+      //   else if(scales)
+      //     x += Math.abs(scales[i](d));
+      // }
     } else {
 
     }
@@ -121,7 +122,12 @@ animdata.d3.bar = function() {
     u.exit()
       .remove();
 
-    u.each(barGeometry);
+    u.each(barGeometry)
+      .style('fill', function(d) {
+        if(!config.signColors)
+          return;
+        return d > 0 ? config.signColors[1] : config.signColors[0];
+      });
 
     if(config.showValues)
       updateValueLabels();
