@@ -141,7 +141,7 @@ animdata.d3.bar = function() {
     u.enter()
       .append('text')
       .classed('value-label', true)
-      .style('font-size', config.valueLabelSize)
+      .style('font-size', config.valueLabelSize + 'px')
       .text(function(d) {return d;});
 
     u.exit()
