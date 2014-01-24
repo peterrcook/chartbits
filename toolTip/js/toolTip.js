@@ -20,7 +20,7 @@ animdata.d3.toolTip = function() {
     title: null, // if no template specified, defines the title. If not a data property, display the string
     fields: null, // if no template specified, list the specified fields
     freezeOnClick: false,
-    allowPointerEvents: false
+//    allowPointerEvents: false   // ie9 doesn't like this
   }
 
 
@@ -95,18 +95,27 @@ animdata.d3.toolTip = function() {
       .append('div')
       .classed('tooltip', true)
       .style('position', 'absolute')
-      .style('opacity', '0')
-      .style('pointer-events', config.allowPointerEvents);
+      .style('opacity', 0);
+      // .style('pointer-events', config.allowPointerEvents); //ie9 doesn't like this
   }
 
   function addEvents() {
     d3elements.container
       .on('mousemove.tooltipComponent', function(d) {
-
         if(uiState.frozen)
           return;
 
         updatePosition();
+      })
+      .on('click.tooltipComponent', function() {
+        if(!uiState.frozen)
+          return;
+
+        uiState.frozen = false;
+        uiState.hoverElement = null;
+        d3elements.tooltip
+          .transition()
+          .style('opacity', '0');
       });
 
     d3elements.elements
@@ -146,6 +155,7 @@ animdata.d3.toolTip = function() {
           .classed('tooltip-selected', true);
         updatePosition();
         updateContent();
+        d3.event.stopPropagation();
       });
   }
 
