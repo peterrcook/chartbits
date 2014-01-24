@@ -12,9 +12,11 @@ animdata.d3.toolTip = function() {
   Configurable variables
   ----*/
   var config = {
-    elements: '',
+    element: null,
+    elements: null, // allows different templates on different elements
     offset: {x: 10, y: 10},
     template: null,
+    templates: null, // allows different templates on different elements
     title: null, // if no template specified, defines the title. If not a data property, display the string
     fields: null, // if no template specified, list the specified fields
     freezeOnClick: false,
@@ -38,7 +40,7 @@ animdata.d3.toolTip = function() {
     frozen: false, // indicates whether the tooltip is frozen
   }
 
-  var template = null;
+  var templates = null; // array of template functions
 
 
   /*------------
@@ -48,7 +50,10 @@ animdata.d3.toolTip = function() {
     // To make things simpler, we assume just one element in the selection
     d3elements.container = d3.select(s[0][0]);
 
-    d3elements.elements = d3elements.container.selectAll(config.elements);
+    if(config.elements)
+      d3elements.elements = d3elements.container.selectAll(config.elements.join(', '));
+    else
+      d3elements.elements = d3elements.container.selectAll(config.element);
 
     d3elements.elements
       .style('cursor', 'pointer');
@@ -61,7 +66,25 @@ animdata.d3.toolTip = function() {
 
     // Compile template
     if(config.template)
-      template = _.template(config.template);
+      templates = [_.template(config.template)];
+
+    if(config.templates) {
+      templates = _.map(config.templates, function(t) {
+        return _.template(t);
+      });
+    }
+
+    // console.log(templates);
+
+    // Append template id to data
+    if(config.elements) {
+      _.each(config.elements, function(e, i) {
+        d3elements.container.selectAll(e).attr('data-tooltip-template', i);
+      });
+    } else {
+      d3elements.elements
+        .attr('data-tooltip-template', 0);
+    }
   }
 
   /*----
@@ -76,15 +99,10 @@ animdata.d3.toolTip = function() {
       .style('pointer-events', config.allowPointerEvents);
   }
 
-  // function construct() {
-  //   constructTooltip();
-  // }
-
   function addEvents() {
     d3elements.container
       .on('mousemove.tooltipComponent', function(d) {
-        // if(uiState.hoverElement === null)
-        //   return;
+
         if(uiState.frozen)
           return;
 
@@ -151,9 +169,11 @@ animdata.d3.toolTip = function() {
 
     d3elements.tooltip.html('');
 
-    if(template) {
+    if(templates) {
+      var i = uiState.hoverElement.attr('data-tooltip-template');
+      // console.log(i, templates, templates[i]);
       d3elements.tooltip
-        .html(template(datum));
+        .html(templates[i](datum));
     } else {
       var dMap = d3.map(datum);
 

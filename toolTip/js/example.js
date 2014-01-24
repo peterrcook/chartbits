@@ -26,7 +26,7 @@
     var toolTip = animdata.d3.toolTip()
       .template('<h1>Circle</h1><div>x: <%= x %></div><div>y: <%= y %></div><div>r: <%= r %></div>')
       .freezeOnClick(true)
-      .elements('circle');
+      .element('circle');
 
     d3.select('#charts .chart1')
       .call(toolTip);
@@ -62,7 +62,7 @@
     var toolTip = animdata.d3.toolTip()
       .title('Circle')
       .fields(['data1', 'data2', 'data3'])
-      .elements('circle');
+      .element('circle');
 
     d3.select('#charts .chart2')
       .call(toolTip);
@@ -116,21 +116,34 @@
       .attr('width', function(d) {return d.r;})
       .attr('height', function(d) {return d.r;});
 
-    var toolTip1 = animdata.d3.toolTip()
-      .title('This is a circle')
-      .fields(['data1', 'data2', 'data3'])
-      .elements('circle');
+    var toolTip = animdata.d3.toolTip()
+      .templates([
+        '<h1>Circle</h1><div>x: <%= x %></div><div>y: <%= y %></div><div>r: <%= r %></div>',
+        '<h1>Square</h1><div>x: <%= x %></div><div>y: <%= y %></div><div>r: <%= r %></div>'
+      ])
+      .elements(['circle', 'rect'])
+      .freezeOnClick(true);
 
     d3.select('#charts .chart3')
-      .call(toolTip1);
+      .call(toolTip);
 
-    var toolTip2 = animdata.d3.toolTip()
-      .title('This is a square')
-      .fields(['data1', 'data2'])
-      .elements('rect');
+    // var toolTip1 = animdata.d3.toolTip()
+    //   .title('This is a circle')
+    //   .fields(['data1', 'data2', 'data3'])
+    //   .elements('circle')
+    //   .freezeOnClick(true);
 
-    d3.select('#charts .chart3')
-      .call(toolTip2);
+    // d3.select('#charts .chart3')
+    //   .call(toolTip1);
+
+    // var toolTip2 = animdata.d3.toolTip()
+    //   .title('This is a square')
+    //   .fields(['data1', 'data2'])
+    //   .elements('rect')
+    //   .freezeOnClick(true);
+
+    // d3.select('#charts .chart3')
+    //   .call(toolTip2);
 
   }
 
