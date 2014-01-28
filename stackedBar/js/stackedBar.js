@@ -23,7 +23,7 @@ animdata.d3.stackedBar = function() {
     domain: null,
     range: [-50, 50],
     colors: ['steelblue', 'indianred'],
-    layerVisible: [true, true, true],
+    layerVisible: null,
     transitionDuration: 500
   }
 
@@ -100,7 +100,7 @@ animdata.d3.stackedBar = function() {
         var ret = {y: d};
 
         // Invisible layer
-        if(!config.layerVisible[i]) {
+        if(config.layerVisible && !config.layerVisible[i]) {
           ret.y0 = d > 0 ? basePositive[j] : baseNegative[j];
           ret.y = 0;
           return ret;
@@ -144,7 +144,10 @@ animdata.d3.stackedBar = function() {
     barUpdate
       .enter()
       .append('rect')
-      .style('fill', function(d, i, j) {return config.colors[j];});
+      .style('fill', function(d, i, j) {
+        var numColors = config.colors.length;
+        return config.colors[j % numColors];
+      });
 
     barUpdate
       .exit()
