@@ -14,11 +14,14 @@ animdata.d3.quartersAxis = function() {
   var config = {
     axisLength: 500,
     numQuarters: 6,
-    startQuarter: 4,
-    startYear: 2010,
+    startQuarter: null, // 1, 2, 3 or 4
+    startYear: null, // e.g. 2010
     label: 'Label',
+    labelColor: '#666',
     lineColor: '#aaa',
-    fontSize: 11
+    fontSize: 11,
+    centerLabels: true,
+    justYears: false
   }
 
 
@@ -42,7 +45,10 @@ animdata.d3.quartersAxis = function() {
   ----*/
   function construct() {
     quarterFormat = function(d) {
-      return 'Q' + +((d - 1) % 4 + 1);
+      var q = +((d - 1) % 4 + 1);
+      if(config.justYears && q !== 1)
+        return '';
+      return 'Q' + q;
     };
   }
 
@@ -52,8 +58,12 @@ animdata.d3.quartersAxis = function() {
   Update
   ----*/
   function update() {
+    var domainEnd = config.startQuarter + config.numQuarters;
+    if(!config.centerLabels)
+      domainEnd--;
+
     var scale = d3.scale.linear()
-      .domain([config.startQuarter, config.startQuarter + config.numQuarters])
+      .domain([config.startQuarter, domainEnd])
       .range([0, config.axisLength]);
 
     var tickValues = [];
@@ -72,16 +82,18 @@ animdata.d3.quartersAxis = function() {
 
 
     // Move tick label to center
-    d3elements.container
-      .selectAll('.tick text')
-      .attr('x', xStep * 0.5);
+    if(config.centerLabels) {
+      d3elements.container
+        .selectAll('.tick text')
+        .attr('x', xStep * 0.5);
+    }
 
     // Years
     var years = [];
     var year = config.startYear;
     var quarter = config.startQuarter;
     for(var i=0; i<config.numQuarters; i++) {
-      years.push(year);
+      years.push(quarter === 1 ? year : '');
       quarter++;
       if(quarter === 5) {
         quarter = 1;
@@ -92,8 +104,8 @@ animdata.d3.quartersAxis = function() {
       .selectAll('.tick')
       .append('text')
       .classed('year', true)
-      .attr('x', function(d, i) {return 0.5 * xStep;})
-      .attr('y', 30)
+      .attr('x', function(d, i) {return config.centerLabels ? 0.5 * xStep : 0;})
+      .attr('y', 32)
       .style('text-anchor', 'middle')
       .text(function(d, i) {return years[i];});
 
@@ -130,7 +142,8 @@ animdata.d3.quartersAxis = function() {
       .style('fill', 'none');
     d3elements.container
       .selectAll('text')
-      .style('font-size', config.fontSize)
+      .style('font-size', config.fontSize + 'px')
+      .style('fill', config.labelColor);
     d3elements.container
       .selectAll('.tick line')
       .style('stroke-width', function(d, i) {return (d - 1) % 4 === 0 ? 3 : 1;});

@@ -1,7 +1,9 @@
 (function(){
   // Construction
   function construct1() {
-    var axis = animdata.d3.quartersAxis();
+    var axis = animdata.d3.quartersAxis()
+      .startQuarter(1)
+      .startYear(2000);
 
     var grid = d3.select('#charts .chart1')
       .append('svg')
