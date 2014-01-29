@@ -43,7 +43,7 @@
         visible[i] = e.classed('visible');
 
       stackedBar
-        .layerVisible(visible);
+        .seriesVisible(visible);
 
       container
         .call(stackedBar);

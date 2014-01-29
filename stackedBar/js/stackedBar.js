@@ -23,7 +23,7 @@ animdata.d3.stackedBar = function() {
     domain: null,
     range: [-50, 50],
     colors: ['steelblue', 'indianred'],
-    layerVisible: null,
+    seriesVisible: null,
     transitionDuration: 500
   }
 
@@ -100,7 +100,7 @@ animdata.d3.stackedBar = function() {
         var ret = {y: d};
 
         // Invisible layer
-        if(config.layerVisible && !config.layerVisible[i]) {
+        if(config.seriesVisible && !config.seriesVisible[i]) {
           ret.y0 = d > 0 ? basePositive[j] : baseNegative[j];
           ret.y = 0;
           return ret;
