@@ -1,0 +1,39 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	width: 1200px;
+	margin: 0 auto;
+	font-size: 14px;
+}
+
+#charts .menu span {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#charts {
+  width: 1200px;
+}
+
+#charts .chart1 {
+  position: relative;
+  height: 250px;
+}
+
+#charts .chart2 {
+  position: relative;
+  height: 200px;
+}
+
+#charts .node p {
+  color: white;
+  font-size: 12px;
+}
+
+/*line, path {
+  stroke-width: 1;
+  stroke: #ccc;
+  fill: none;
+  shape-rendering: crispEdges;
+}
+
+*/

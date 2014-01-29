@@ -1,3 +1,5 @@
+/* (C) 2014 Peter Cook */
+
 (function() {
 
 var animdata = window.animdata || {};
@@ -37,9 +39,6 @@ animdata.d3.chord = function() {
   /*----
   Update
   ----*/
-  function update() {
-  }
-
   function update() {
   }
 

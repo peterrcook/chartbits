@@ -1,20 +1,15 @@
 (function(){
-  var data1 = [
-  ];
-
-  // Helpers
- 
-
-
   // Construction
   function construct1() {
-    var basic = animdata.d3.basic();
+    var axis = animdata.d3.quartersAxis();
 
     var grid = d3.select('#charts .chart1')
+      .append('svg')
       .style('width', '600px')
       .style('height', '200px')
-      .datum(data1)
-      .call(basic);
+      .append('g')
+      .attr('transform', animdata.svg.translate(50, 50))
+      .call(axis);
     }
 
   construct1();
