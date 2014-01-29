@@ -12,9 +12,9 @@ animdata.d3.quartersAxis = function() {
   Configurable variables
   ----*/
   var config = {
-    length: 500,
-    numQuarters: 11,
-    startQuarter: 1,
+    axisLength: 500,
+    numQuarters: 6,
+    startQuarter: 4,
     startYear: 2010,
     label: 'Label',
     lineColor: '#aaa',
@@ -53,14 +53,14 @@ animdata.d3.quartersAxis = function() {
   ----*/
   function update() {
     var scale = d3.scale.linear()
-      .domain([0, config.numQuarters])
-      .range([0, config.length]);
+      .domain([config.startQuarter, config.startQuarter + config.numQuarters])
+      .range([0, config.axisLength]);
 
     var tickValues = [];
     for(var i=0; i<config.numQuarters; i++)
-      tickValues.push(i+1);
+      tickValues.push(config.startQuarter + i);
 
-    var xStep = config.length / config.numQuarters;
+    var xStep = config.axisLength / config.numQuarters;
 
     var axisComponent = d3.svg.axis()
       .scale(scale)
@@ -74,7 +74,47 @@ animdata.d3.quartersAxis = function() {
     // Move tick label to center
     d3elements.container
       .selectAll('.tick text')
-      .attr('x', -xStep * 0.5);
+      .attr('x', xStep * 0.5);
+
+    // Years
+    var years = [];
+    var year = config.startYear;
+    var quarter = config.startQuarter;
+    for(var i=0; i<config.numQuarters; i++) {
+      years.push(year);
+      quarter++;
+      if(quarter === 5) {
+        quarter = 1;
+        year++;
+      }
+    }
+    d3elements.container
+      .selectAll('.tick')
+      .append('text')
+      .classed('year', true)
+      .attr('x', function(d, i) {return 0.5 * xStep;})
+      .attr('y', 30)
+      .style('text-anchor', 'middle')
+      .text(function(d, i) {return years[i];});
+
+    // Years
+    // var years = [];
+    // for(var i=0; i<=Math.floor((config.numQuarters - 1) / 4); i++) {
+    //   years.push(config.startYear + i);
+    // }
+    // d3elements.container
+    //   .append('g')
+    //   .classed('years', true)
+    //   .attr('transform', animdata.svg.translate(0, 35))
+    //   .selectAll('text')
+    //   .data(years)
+    //   .enter()
+    //   .append('text')
+    //   .attr('x', function(d, i) {return (i * 4 + 0.5) * xStep;})
+    //   .style('font-size', config.fontSize)
+    //   .style('text-anchor', 'middle')
+    //   .style('font-weight', 'bold')
+    //   .text(function(d) {return d;});
 
     // Styling
     d3elements.container
@@ -91,26 +131,9 @@ animdata.d3.quartersAxis = function() {
     d3elements.container
       .selectAll('text')
       .style('font-size', config.fontSize)
-
-
-    // Years
-    var years = [];
-    for(var i=0; i<=Math.floor((config.numQuarters - 1) / 4); i++) {
-      years.push(config.startYear + i);
-    }
     d3elements.container
-      .append('g')
-      .classed('years', true)
-      .attr('transform', animdata.svg.translate(0, 35))
-      .selectAll('text')
-      .data(years)
-      .enter()
-      .append('text')
-      .attr('x', function(d, i) {return (i * 4 + 0.5) * xStep;})
-      .style('font-size', config.fontSize)
-      .style('text-anchor', 'middle')
-      .style('font-weight', 'bold')
-      .text(function(d) {return d;});
+      .selectAll('.tick line')
+      .style('stroke-width', function(d, i) {return (d - 1) % 4 === 0 ? 3 : 1;});
   }
 
 
