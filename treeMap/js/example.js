@@ -23,7 +23,7 @@
 
   var data2 = [
     {"children" : [
-       {"name": "a1 - a very very very long label", "size": 100, "type": "animal"},
+       {"name": "a1 - a very very very very very very very very very very very very very very very very very very very very very long label", "size": 100, "type": "animal"},
        {"name": "a2 - a very very very long label", "size": 100, "type": "vegetable"},
        {"name": "a3 - a very very very long label", "size": 100, "type": "animal"},
        {"name": "a4 - a very very very long label", "size": 100, "type": "mineral"},
@@ -63,7 +63,9 @@
       .color(function(d, i) {return colorScale(i);})
       .width(200)
       .height(200)
-      .labels(true);
+      .labels(true)
+      .labelSize(12)
+      .labelPadding(5);
 
     var grid = d3.select('#charts .chart1')
       .style('width', '600px')
@@ -101,6 +103,7 @@
       .width(scaledWidths)
       .height(height)
       .labels(true)
+      .labelPadding(10)
       .padding(1)
       .color(function(d, i) {return colorMap[d.type];})
       .value(function(d) {return d.size;});

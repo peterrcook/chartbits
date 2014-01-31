@@ -14,8 +14,8 @@ animdata.d3.treeMap = function() {
     width: 200,
     height: 200,
     labels: true,
-    // labelPadding: 0, // disable for now - requires further thought with regards negative widths in position()
-    labelDisplayThreshold: 150, // if area / num. chars > threshold, display the label
+    labelSize: 10,
+    labelPadding: 10, 
     padding: 0,
     value: function(d) {return d.size;}, // value function
     sticky: false,
@@ -53,12 +53,28 @@ animdata.d3.treeMap = function() {
       .style('position', 'absolute');
   }
 
-  function position() {
-    this.style('left', function(d) { return d.x + 'px'; })
-        .style('top', function(d) { return d.y + 'px'; })
-        .style('width', function(d) { return d.dx - config.padding + 'px'; })
-        .style('height', function(d) { return d.dy - config.padding + 'px'; })
-        // .style('padding', config.labelPadding + 'px');
+  function position(d, i) {
+    var totalLabelPadding = 2 * config.labelPadding;
+
+    // Only include label padding if the element width is bigger than the label padding
+    var doLabelPadding = d.dx > totalLabelPadding && d.dy > totalLabelPadding + config.labelSize;
+
+    var width = d.dx - config.padding;
+    var height = d.dy - config.padding;
+    var labelPadding = 0;
+
+    if(doLabelPadding) {
+      width -= totalLabelPadding;
+      height -= totalLabelPadding;
+      labelPadding = config.labelPadding;
+    }
+
+    d3.select(this)
+        .style('left', d.x + 'px')
+        .style('top', d.y + 'px')
+        .style('width', width + 'px')
+        .style('height', height + 'px')
+        .style('padding', labelPadding + 'px');
   }
 
 
@@ -79,7 +95,8 @@ animdata.d3.treeMap = function() {
       .append('p')
       .style('display', 'table-cell')
       .style('vertical-align', 'middle')
-      .style('text-align', 'center');
+      .style('text-align', 'center')
+      .style('font-size', config.labelSize + 'px');
 
     u.exit()
       .remove();
@@ -87,16 +104,21 @@ animdata.d3.treeMap = function() {
     u.style('display', function(d, i) {return i === 0 ? 'none' : 'table';})  // table used for text centering
       .style('background-color', function(d, i) {return config.color(d, i);})
       .style('position', 'absolute')
-      .call(position);
+      .each(position);
 
     u.select('p')
       .text(function(d) {
-        var area = (d.dx - config.padding /*- 2 * config.labelPadding*/) * (d.dy - config.padding /*- 2 * config.labelPadding*/);
-        var enoughSpace = false;
-        if(d.name !== undefined) {
-          enoughSpace = area / d.name.length > config.labelDisplayThreshold;
-        }
-        return config.labels && enoughSpace ? d.name : '';
+        return config.labels ? d.name : '';
+    });
+
+    // Measure size to check that label isn't too long
+    u.select('p')
+      .text(function(d) {
+        var height = this.clientHeight + 2 * config.labelPadding + config.padding;
+        var width = this.clientWidth + 2 * config.labelPadding + config.padding;
+        if(height > d.dy || width > d.dx)
+          return '';
+        return config.labels ? d.name : '';
       });
   }
 
