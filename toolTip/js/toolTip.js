@@ -177,17 +177,21 @@ animdata.d3.toolTip = function() {
   ----*/
   function updatePosition() {
     var container = d3elements.container[0][0];
-    var containerWidth = container.clientWidth;
-
     var pos = d3.mouse(container);
+    var containerWidth = container.clientWidth;
+    var containerHeight = container.clientHeight;
 
     uiState.position.x = pos[0] + config.offset.x;
     uiState.position.y = pos[1] + config.offset.y;
 
-
+    // Adjust tooltip position depending on which container quadrant we're in
     if(pos[0] > 0.5 * containerWidth) {
       var tooltipWidth = d3elements.tooltip[0][0].clientWidth;
       uiState.position.x -= tooltipWidth + 2 * config.offset.x;
+    }
+    if(pos[1] > 0.5 * containerHeight) {
+      var tooltipHeight = d3elements.tooltip[0][0].clientHeight;
+      uiState.position.y -= tooltipHeight + 2 * config.offset.y;
     }
 
     d3elements.tooltip
