@@ -165,9 +165,19 @@ animdata.d3.toolTip = function() {
   Update
   ----*/
   function updatePosition() {
-    var pos = d3.mouse(d3elements.container[0][0]);
+    var container = d3elements.container[0][0];
+    var containerWidth = container.clientWidth;
+
+    var pos = d3.mouse(container);
+
     uiState.position.x = pos[0] + config.offset.x;
     uiState.position.y = pos[1] + config.offset.y;
+
+
+    if(pos[0] > 0.5 * containerWidth) {
+      var tooltipWidth = d3elements.tooltip[0][0].clientWidth;
+      uiState.position.x -= tooltipWidth + 2 * config.offset.x;
+    }
 
     d3elements.tooltip
       .style('left', uiState.position.x + 'px')
