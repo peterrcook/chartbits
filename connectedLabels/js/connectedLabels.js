@@ -2,6 +2,8 @@
 
 (function() {
 
+"use strict";
+
 var animdata = window.animdata || {};
 window.animdata = animdata;
 
@@ -26,6 +28,7 @@ animdata.d3.connectedLabels = function() {
   Internal variables
   ----*/
   var constructed = false;
+  var data = null;
   var d3elements = {
     container: null,
     groups: null,
@@ -103,7 +106,7 @@ animdata.d3.connectedLabels = function() {
   ----*/
   function connectorPath(d, i) {
     // var labelY = config.position.y + (i + 0.5) * (config.fontSize + 4);
-    p = animdata.svg.pathAbsMove(d.labelPosition.x, d.labelPosition.y);
+    var p = animdata.svg.pathAbsMove(d.labelPosition.x, d.labelPosition.y);
     p += animdata.svg.pathAbsLine(d.position.x, d.labelPosition.y);
     p += animdata.svg.pathAbsLine(d.position.x, d.position.y);
     return p;

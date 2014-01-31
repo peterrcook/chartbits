@@ -1,5 +1,7 @@
 (function() {
 
+"use strict";
+
 var animdata = window.animdata || {};
 window.animdata = animdata;
 
@@ -65,7 +67,7 @@ animdata.d3.chord = function() {
   function update() {
     chordLayout.matrix(data);
 
-    console.log(chordLayout.groups());
+    // console.log(chordLayout.groups());
 
 
     d3elements.svg

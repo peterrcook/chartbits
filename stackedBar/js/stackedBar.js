@@ -7,6 +7,8 @@ Data is 2d-array with the 1st row representing the bottom layer etc.
 
 (function() {
 
+"use strict";
+
 var animdata = window.animdata || {};
 window.animdata = animdata;
 

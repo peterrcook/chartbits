@@ -7,6 +7,8 @@ For now, data is 2d-array. Assume evenly spaced data
 
 (function() {
 
+"use strict";
+
 var animdata = window.animdata || {};
 window.animdata = animdata;
 

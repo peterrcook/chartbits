@@ -1,5 +1,7 @@
 (function() {
 
+"use strict";
+
 var animdata = window.animdata || {};
 window.animdata = animdata;
 
@@ -23,6 +25,7 @@ animdata.d3.radialPoints = function() {
   Internal variables
   ----*/
   var constructed = false;
+  var data = null;
   var d3elements = {
     container: null,
     points: null

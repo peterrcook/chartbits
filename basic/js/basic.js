@@ -2,11 +2,13 @@
 
 (function() {
 
+"use strict";
+
 var animdata = window.animdata || {};
 window.animdata = animdata;
 
 animdata.d3 = animdata.d3 || {};
-animdata.d3.chord = function() {
+animdata.d3.basic = function() {
 
   /*----
   Configurable variables
