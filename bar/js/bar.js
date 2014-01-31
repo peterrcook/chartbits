@@ -23,7 +23,7 @@ animdata.d3.bar = function() {
     showValues: false,
     valueLabelSize: 10,
     signColors: null, // colour -ve and +ve differently e.g. ['red', 'green']
-  }
+  };
 
 
 
@@ -38,7 +38,7 @@ animdata.d3.bar = function() {
   var d3elements = {
     container: null,
     bars: null
-  }
+  };
 
 
   /*----
@@ -61,10 +61,11 @@ animdata.d3.bar = function() {
   ----*/
   function barGeometry(d, i) {
     // d = config.accessor(d);
+    var x, y, width;
     if(config.orientation === 'horizontal') {
-      var x = i * config.transform.x;
-      var y = i * config.transform.y;
-      var width = 0;
+      x = i * config.transform.x;
+      y = i * config.transform.y;
+      width = 0;
       if(!isNaN(d)) {
         if(scale)
           width = Math.abs(scale(d));
@@ -86,10 +87,10 @@ animdata.d3.bar = function() {
   }
 
   function valueLabelGeometry(d, i) {
-    // d = config.accessor(d);
+    var x, y;
     if(config.orientation === 'horizontal') {
-      var x = i * config.transform.x + 3;
-      var y = i * config.transform.y + 0.5 * (config.barWidth + 0.8 * config.valueLabelSize);
+      x = i * config.transform.x + 3;
+      y = i * config.transform.y + 0.5 * (config.barWidth + 0.8 * config.valueLabelSize);
       // if(!isNaN(d) && d > 0) {
       //   if(scale)
       //     x += Math.abs(scale(d));
@@ -183,11 +184,11 @@ animdata.d3.bar = function() {
       if(!arguments.length) return config[a];
       config[a] = _;
       return chart;
-    }
+    };
   });
 
 
   return chart;
-}
+};
 
 })();

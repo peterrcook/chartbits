@@ -2,6 +2,17 @@ module.exports = function(grunt){
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        jshint: {
+          files: ['bar/js/bar.js',
+                  'connectedLabels/js/connectedLabels.js',
+                  'layerMenu/js/layerMenu.js',
+                  'line/js/line.js',
+                  'quartersAxis/js/quartersAxis.js',
+                  'stackedBar/js/stackedBar.js',
+                  'toolTip/js/toolTip.js',
+                  'treeMap/js/treeMap.js',
+                  'yearsAxis/js/yearsAxis.js']
+        },
         uglify: {
             options: {
               banner: '/* (C)2014 Peter Cook prcweb.co.uk */'
@@ -25,7 +36,8 @@ module.exports = function(grunt){
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('default', ['uglify']);
+    grunt.registerTask('default', [/*'jshint',*/ 'uglify']);
 
 };
