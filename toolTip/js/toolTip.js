@@ -20,6 +20,7 @@ animdata.d3.toolTip = function() {
     title: null, // if no template specified, defines the title. If not a data property, display the string
     fields: null, // if no template specified, list the specified fields
     freezeOnClick: false,
+    templateVariableScope: false,
 //    allowPointerEvents: false   // ie9 doesn't like this
   }
 
@@ -65,13 +66,23 @@ animdata.d3.toolTip = function() {
       constructTooltip();
 
     // Compile template
-    if(config.template)
-      templates = [_.template(config.template)];
+    if(config.template) {
+      if(config.templateVariableScope)
+        templates = [_.template(config.template, null, {variable: 'data'})];
+      else
+        templates = [_.template(config.template)];
+    }
 
     if(config.templates) {
-      templates = _.map(config.templates, function(t) {
-        return _.template(t);
-      });
+      if(config.templateVariableScope) {
+        templates = _.map(config.templates, function(t) {
+          return _.template(t, null, {variable: 'data'});
+        });
+      } else {
+        templates = _.map(config.templates, function(t) {
+          return _.template(t);
+        });
+      }
     }
 
     // console.log(templates);

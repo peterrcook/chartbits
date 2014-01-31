@@ -118,11 +118,12 @@
 
     var toolTip = animdata.d3.toolTip()
       .templates([
-        '<h1>Circle</h1><div>x: <%= x %></div><div>y: <%= y %></div><div>r: <%= r %></div>',
-        '<h1>Square</h1><div>x: <%= x %></div><div>y: <%= y %></div><div>r: <%= r %></div>'
+        '<h1>Circle</h1><div>x: <%= data.x %></div><div>y: <%= data.y %></div><div>r: <%= data.r %></div>',
+        '<h1>Square</h1><div>x: <%= data.x %></div><div>y: <%= data.y %></div><div>r: <%= data.r %></div>'
       ])
       .elements(['circle', 'rect'])
-      .freezeOnClick(true);
+      .freezeOnClick(true)
+      .templateVariableScope(true);
 
     d3.select('#charts .chart3')
       .call(toolTip);
