@@ -113,6 +113,15 @@ animdata.d3.connectedLabels = function() {
   }
 
   function update() {
+    // For now, remove labels and connectors then re-add
+    d3elements.container
+      .selectAll('div.label-group')
+      .remove();
+
+    d3elements.svg
+      .selectAll('path.connector')
+      .remove();
+
     var containerWidth = +d3elements.container
       .style('width')
       .replace('px', '');

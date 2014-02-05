@@ -87,6 +87,16 @@
          .classed('hover', false);
       });
 
+    // Events
+    d3.select('#charts .chart1 .update')
+      .on('click', function() {
+        data1.pop();
+        console.log(data1);
+        d3.select('#charts .chart1')
+          .datum(data1)
+          .call(connectedLabels);
+      });
+
   }
 
   construct1();
