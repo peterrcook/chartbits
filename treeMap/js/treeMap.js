@@ -17,7 +17,8 @@ animdata.d3.treeMap = function() {
     height: 200,
     labels: true,
     labelSize: 10,
-    labelPadding: 10, 
+    labelPadding: 10,
+    labelData: function(d) {return d.name;}, // label function
     padding: 0,
     value: function(d) {return d.size;}, // value function
     sticky: false,
@@ -110,7 +111,7 @@ animdata.d3.treeMap = function() {
 
     u.select('p')
       .text(function(d) {
-        return config.labels ? d.name : '';
+        return config.labels ? config.labelData(d) : '';
     });
 
     // Measure size to check that label isn't too long
@@ -120,7 +121,7 @@ animdata.d3.treeMap = function() {
         var width = this.clientWidth + 2 * config.labelPadding + config.padding;
         if(height > d.dy || width > d.dx)
           return '';
-        return config.labels ? d.name : '';
+        return config.labels ? config.labelData(d) : '';
       });
   }
 
