@@ -23,6 +23,7 @@ animdata.d3.toolTip = function() {
     fields: null, // if no template specified, list the specified fields
     freezeOnClick: false,
     templateVariableScope: false,
+    width: 200,
 //    allowPointerEvents: false   // ie9 doesn't like this
   }
 
@@ -108,7 +109,8 @@ animdata.d3.toolTip = function() {
       .append('div')
       .classed('tooltip', true)
       .style('position', 'absolute')
-      .style('opacity', 0);
+      .style('opacity', 0)
+      .style('width', config.width + 'px');
       // .style('pointer-events', config.allowPointerEvents); //ie9 doesn't like this
   }
 
