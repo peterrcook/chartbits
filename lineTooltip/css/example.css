@@ -38,3 +38,7 @@ body {
   background-color: white;
 }
 
+#charts .chart .markers line {
+  stroke: #ddd;
+  stroke-width: 1px;
+}

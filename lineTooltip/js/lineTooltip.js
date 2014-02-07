@@ -14,13 +14,16 @@ animdata.d3.lineTooltip = function() {
   Configurable variables
   ----*/
   var config = {
+    svgOffset: {x: 0, y: 0}, // offset of the svg container wrt the div container - might be a better way to do this...
     offset: {x: 10, y: 10},
     width: 200,
     xStep: 150,
     domain: [-10, 10],
     range: [0, 400],
     colors: null,
-    seriesNames: []
+    seriesNames: [],
+    seriesVisible: null,
+    unit: ''
   }
 
 
@@ -56,11 +59,11 @@ animdata.d3.lineTooltip = function() {
     d3elements.tooltip = d3elements.container
       .select('div.tooltip');
 
-    constructTooltip();
-    constructMarkers();
-
     xScale = d3.scale.linear().domain([0, data[0].length - 1]).range([0, (data[0].length - 1) * config.xStep]);
     yScale = d3.scale.linear().domain(config.domain).range([config.range[1], config.range[0]]);
+
+    constructTooltip();
+    constructMarkers();
   }
 
   /*----
@@ -78,7 +81,8 @@ animdata.d3.lineTooltip = function() {
       .selectAll('div')
       .data(data)
       .enter()
-      .append('div');
+      .append('div')
+      .style('color', function(d, i) {return config.colors ? config.colors[i] : 'black';});
       // .style('pointer-events', config.allowPointerEvents); //ie9 doesn't like this
   }
 
@@ -86,7 +90,9 @@ animdata.d3.lineTooltip = function() {
     d3elements.markers = d3elements.container
       .select('svg')
       .append('g')
-      .classed('markers', true)
+      .classed('markers', true);
+
+    d3elements.markers
       .selectAll('circle')
       .data(data)
       .enter()
@@ -95,6 +101,11 @@ animdata.d3.lineTooltip = function() {
       .style('fill', 'none')
       .style('stroke', function(d, i) {return config.colors[i];})
       .style('stroke-width', '1px');
+
+    d3elements.markers
+      .append('line')
+      .attr('y1', yScale.range()[0])
+      .attr('y2', yScale.range()[1]);
   }
 
   function addEvents() {
@@ -102,6 +113,7 @@ animdata.d3.lineTooltip = function() {
       .on('mousemove.tooltipComponent', function(d) {
         updatePosition();
         updateMarkers();
+        updateContent();
         updateVisibility();
       });
 
@@ -136,17 +148,17 @@ animdata.d3.lineTooltip = function() {
     var container = d3elements.container[0][0];
     var pos = d3.mouse(container);
 
-    uiState.i = Math.round(xScale.invert(pos[0]));
+    uiState.i = Math.round(xScale.invert(pos[0] - config.svgOffset.x));
 
    // console.log(uiState.i);
 
-    if(uiState.i >= data[0].length) {
+    if(uiState.i < 0 || uiState.i >= data[0].length) {
       uiState.i = null;
       updateVisibility();
       return;
     }
 
-    var x = xScale(uiState.i) + config.offset.x;
+    var x = xScale(uiState.i) + config.offset.x + config.svgOffset.x;
     var containerWidth = container.clientWidth;
 
     // Adjust tooltip position depending on which container quadrant we're in
@@ -165,10 +177,21 @@ animdata.d3.lineTooltip = function() {
       return;
 
     d3elements.markers
-      .attr('cx', xScale(uiState.i))
+      .selectAll('circle')
+      .attr('cx', xScale(uiState.i) + config.svgOffset.x)
       .attr('cy', function(d, series) {
         return yScale(data[series][uiState.i]);
+      })
+      .style('opacity', function(d, i) {
+        if(config.seriesVisible === null)
+          return 1;
+        return config.seriesVisible[i] ? 1 : 0;
       });
+
+    d3elements.markers
+      .select('line')
+      .attr('x1', xScale(uiState.i) + config.svgOffset.x)
+      .attr('x2', xScale(uiState.i) + config.svgOffset.x);
   }
 
   function updateContent() {
@@ -177,9 +200,15 @@ animdata.d3.lineTooltip = function() {
 
     d3elements.tooltip
       .selectAll('div')
+      .style('opacity', function(d, i) {
+        if(config.seriesVisible === null)
+          return 1;
+        return config.seriesVisible[i] ? 1 : 0;
+      })
       .html(function(d, i) {
         var ret = config.seriesNames[i] + ': ';
         ret += d[uiState.i];
+        ret += config.unit;
         return ret;
       });
   }

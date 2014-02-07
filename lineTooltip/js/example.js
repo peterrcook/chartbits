@@ -27,55 +27,51 @@
       .datum(data1)
       .call(line);
 
-
+    // Tooltip
     var toolTip = animdata.d3.lineTooltip()
       .xStep(150)
       .domain([-10, 10])
       .range([0, 400])
       .width(150)
       .colors(['steelblue', 'orange', 'green'])
-      .seriesNames(['Series A', 'Series B', 'Series C']);
+      .seriesNames(['Series A', 'Series B', 'Series C'])
+      .unit('%');
 
     d3.select('.chart1')
       .datum(data1)
       .call(toolTip);
 
+
+    // Menu
+    var menu = d3.select('.chart1')
+      .append('div')
+      .classed('menu', true)
+      .selectAll('div.item')
+      .data(data1)
+      .enter()
+      .append('div')
+      .classed('item visible', true)
+      .text(function(d, i) {return 'Series ' + i;})
+      .on('click', function(d, i) {
+        var e = d3.select(this);
+        e.classed('visible', !e.classed('visible'));
+        visible[i] = e.classed('visible');
+
+      line
+        .seriesVisible(visible);
+      container
+        .call(line);
+
+      toolTip
+        .seriesVisible(visible);
+      d3.select('.chart1')
+        .datum(data1)
+        .call(toolTip);
+      });
+
+
   }
 
   chart1();
-
-  // Construction
-  function construct1() {
-    var data = [];
-    var width = 500;
-    var height = 300;
-
-    for(var i=0; i<10; i++) {
-      data.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: Math.random() * 50
-      });
-    }
-
-    d3.select('#charts .chart1 svg')
-      .selectAll('circle')
-      .data(data)
-      .enter()
-      .append('circle')
-      .attr('cx', function(d) {return d.x;})
-      .attr('cy', function(d) {return d.y;})
-      .attr('r', function(d) {return d.r;});
-
-    var toolTip = animdata.d3.toolTip()
-      .template('<h1>Circle</h1><div>x: <%= x %></div><div>y: <%= y %></div><div>r: <%= r %></div>')
-      .freezeOnClick(true)
-      .element('circle')
-      .width(150);
-
-    d3.select('#charts .chart1')
-      .call(toolTip);
-  }
-
 
 })();
