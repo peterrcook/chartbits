@@ -20,3 +20,8 @@ rect {
   stroke: none;
   fill: steelblue;
 }
+
+div.chart {
+  clear: left;
+  margin-bottom: 50px;
+}

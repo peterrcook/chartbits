@@ -19,6 +19,7 @@ animdata.d3.stackedBar = function() {
   Configurable variables
   ----*/
   var config = {
+    accessor: function(d) {return d;},
     datumAccessor: function(d) {return d;},
     barWidth: 10,
     transform: {x: 11, y: 0},
@@ -99,21 +100,25 @@ animdata.d3.stackedBar = function() {
     var baseNegative = animdata.util.initArray(0, numValues);
     layerData = _.map(data, function(layer, i) {
       layer = _.map(layer, function(d, j) {
-        var ret = {y: d};
+        var value = config.accessor(d);
+        var ret = {y: value};
+
+        // Copy d's properties across
+        _.extend(ret, d);
 
         // Invisible layer
         if(config.seriesVisible && !config.seriesVisible[i]) {
-          ret.y0 = d > 0 ? basePositive[j] : baseNegative[j];
+          ret.y0 = value > 0 ? basePositive[j] : baseNegative[j];
           ret.y = 0;
           return ret;
         }
   
-        if(d > 0) {
+        if(value > 0) {
           ret.y0 = basePositive[j];
-          basePositive[j] += d;
+          basePositive[j] += value;
         } else {
           ret.y0 = baseNegative[j];
-          baseNegative[j] += d;
+          baseNegative[j] += value;
         }
 
         return ret;

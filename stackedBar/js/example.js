@@ -53,33 +53,40 @@
 
 
   function chart2() {
-    var data1 = {d: [4, 1, -7, 5, -1, 5]};
-    var transform = {x: 0, y: 15};
-    var bar = animdata.d3.bar()
-      .datumAccessor(function(d) {return d.d;})
-      .barWidth(10)
+    var data1 = [
+      [{region: 'Europe', value: 4}, {region: 'Europe', value: 1}],
+      [{region: 'Asia', value: 1}, {region: 'Asia', value: 6}],
+      [{region: 'America', value: 5}, {region: 'America', value: 2}]
+    ];
+    var visible = [true, true, true];
+
+    var stackedBar = animdata.d3.stackedBar()
+      .accessor(function(d) {return d.value;})
+      .barWidth(50)
       .domain([-10, 10])
-      .range([-50, 50])
-      .orientation('horizontal')
-      .transform(transform)
-      .signColors(['red', 'green']);
+      .range([-100, 100])
+      .colors(['steelblue', 'orange', 'green'])
+      .transform({x: 55, y: 0});
 
     var container = d3.select('#chart2')
       .append('svg')
+      .attr('width', 1000)
+      .attr('height', 300)
       .append('g')
-      .attr('transform', animdata.svg.translate(50, 50));
-
-    container
-      .append('line')
-      .attr('y1', -5)
-      .attr('y2', 90);
+      .attr('transform', animdata.svg.translate(50, 200));
 
     container
       .classed('bar', true)
       .datum(data1)
-      .call(bar);
-    }
+      .call(stackedBar);
+
+    container
+      .selectAll('rect')
+      .on('mouseenter', function(d) {
+        d3.select('#chart2 .info').text(d.region);
+      });
+  }
 
   chart1();
-  // chart2();
+  chart2();
 })();
