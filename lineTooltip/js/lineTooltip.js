@@ -200,10 +200,10 @@ animdata.d3.lineTooltip = function() {
 
     d3elements.tooltip
       .selectAll('div')
-      .style('opacity', function(d, i) {
+      .style('display', function(d, i) {
         if(config.seriesVisible === null)
-          return 1;
-        return config.seriesVisible[i] ? 1 : 0;
+          return 'block';
+        return config.seriesVisible[i] ? 'block' : 'none';
       })
       .html(function(d, i) {
         var ret = config.seriesNames[i] + ': ';
@@ -222,6 +222,10 @@ animdata.d3.lineTooltip = function() {
       init(s);
 
     addEvents();
+
+    /* Respond to update of visibility */
+    updateMarkers();
+    updateContent();
 
     constructed = true;
   }
