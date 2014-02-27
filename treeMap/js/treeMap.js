@@ -110,13 +110,13 @@ animdata.d3.treeMap = function() {
       .each(position);
 
     u.select('p')
-      .text(function(d) {
+      .html(function(d) {
         return config.labels ? config.labelData(d) : '';
     });
 
     // Measure size to check that label isn't too long
     u.select('p')
-      .text(function(d) {
+      .html(function(d) {
         var height = this.clientHeight + 2 * config.labelPadding + config.padding;
         var width = this.clientWidth + 2 * config.labelPadding + config.padding;
         if(height > d.dy || width > d.dx)

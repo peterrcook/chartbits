@@ -28,3 +28,7 @@ body {
   color: white;
   font-size: 12px;
 }
+
+#charts .node h1 {
+  font-size: 14px;
+}

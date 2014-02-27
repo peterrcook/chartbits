@@ -160,7 +160,32 @@
     }
 
 
+  function construct4() {
+    var colorScale = d3.scale.category20c();
+
+    var treeMap = animdata.d3.treeMap()
+      .color(function(d, i) {return colorScale(i);})
+      .width(200)
+      .height(200)
+      .labels(true)
+      .labelSize(12)
+      .labelData(function(d) {return '<h1>' + d.name + '</h1><p>£' + d.size + '</p>';})
+      .labelPadding(5);
+
+    var grid = d3.select('#charts .chart4')
+      .style('width', '600px')
+      .style('height', '200px')
+      .datum(data1)
+      .call(treeMap);
+
+    grid
+      .selectAll('div.treemap')
+      .style('left', function(d, i) {return i * 250 + 'px';});
+    }
+
+
   construct1();
   construct2();
   construct3();
+  construct4();
 })();
