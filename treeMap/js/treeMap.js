@@ -92,7 +92,21 @@ animdata.d3.treeMap = function() {
 
     var nodes = u.enter()
       .append('div')
-      .classed('node', true)
+      .classed('node', true);
+
+    nodes
+      .on('mouseover', function(d, i) {
+        var fill = d3.select(this).style('background-color');
+        var e = d3.select(this);
+        this.__data__.originalColor = fill;
+        var brighter = d3.rgb(fill).brighter(0.4).toString();
+        e.style('background-color', brighter);
+      })
+      .on('mouseout', function(d, i) {
+        var e = d3.select(this);
+        var fill = this.__data__.originalColor;
+        d3.select(this).style('background-color', fill);
+      });
 
     nodes
       .append('p')
