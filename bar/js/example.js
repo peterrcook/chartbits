@@ -50,6 +50,7 @@
 
     var container = d3.select('#chart2')
       .append('svg')
+      .attr('height', 170)
       .append('g')
       .attr('transform', animdata.svg.translate(50, 50));
 
@@ -64,6 +65,33 @@
       .call(bar);
     }
 
+  function chart3() {
+    var data1 = [4, 1, -7, 5000, -1000, 5000];
+    var transform = {x: 20, y: 0};
+    var bar = animdata.d3.bar()
+      .barWidth(18)
+      // .domain([-10, 10])
+      .domains([[-10, 10], [-10, 10], [-10, 10], [-5000, 5000], [-5000, 5000], [-5000, 5000]])
+      .range([-50, 50])
+      .orientation('vertical')
+      .transform(transform)
+      .showValues(false);
+
+    var container = d3.select('#chart3')
+      .append('svg')
+      .attr('width', 1000)
+      .attr('height', 200)
+      .append('g')
+      .attr('transform', animdata.svg.translate(50, 50));
+
+    container
+      .classed('bar', true)
+      .datum(data1)
+      .call(bar);
+    }
+
+
   chart1();
   chart2();
+  chart3();
 })();

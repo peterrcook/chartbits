@@ -61,29 +61,41 @@ animdata.d3.bar = function() {
   ----*/
   function barGeometry(d, i) {
     // d = config.accessor(d);
-    var x, y, width;
+    var x, y, width, height;
+    var myScale = scale ? scale : scales[i];
     if(config.orientation === 'horizontal') {
-      x = i * config.transform.x;
-      y = i * config.transform.y;
       width = 0;
       if(!isNaN(d)) {
-        if(scale)
-          width = Math.abs(scale(d));
-        else if(scales)
-          width = Math.abs(scales[i](d));
+        width = Math.abs(myScale(d));
       }
 
       if(d < 0)
         x -= width;
-    } else {
 
+      height = config.barWidth;
+
+      x = i * config.transform.x;
+      y = i * config.transform.y;
+    } else {
+      x = i * config.transform.x;
+
+      // console.log(myScale)
+      height = Math.abs(myScale(0) - myScale(d));
+      // console.log(d, height);
+      width = config.barWidth;
+
+      y = myScale(0);
+      if(d > 0)
+        y -= height;
+ 
+      y += i * config.transform.y;
     }
 
     d3.select(this)
       .attr('x', x)
       .attr('y', y)
       .attr('width', width)
-      .attr('height', config.barWidth);
+      .attr('height', height);
   }
 
   function valueLabelGeometry(d, i) {
