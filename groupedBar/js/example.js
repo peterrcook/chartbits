@@ -8,12 +8,13 @@
     ];
     var visible = [true, true, true];
 
-    var stackedBar = animdata.d3.stackedBar()
-      .barWidth(10)
+    var groupedBar = animdata.d3.groupedBar()
+      .groupWidth(30)
       .domain([-10, 10])
       .range([-100, 100])
       .colors(['steelblue', 'orange', 'green'])
-      .transform({x: 35, y: 0});
+      .transform({x: 35, y: 0})
+      .seriesVisible(visible);
 
     var container = d3.select('#chart1')
       .append('svg')
@@ -25,29 +26,29 @@
     container
       .classed('bar', true)
       .datum(data1)
-      .call(stackedBar);
+      .call(groupedBar);
 
     // Menu
-    // var menu = d3.select('#chart1')
-    //   .append('div')
-    //   .classed('menu', true)
-    //   .selectAll('div.item')
-    //   .data(data1)
-    //   .enter()
-    //   .append('div')
-    //   .classed('item visible', true)
-    //   .text(function(d, i) {return 'Series ' + i;})
-    //   .on('click', function(d, i) {
-    //     var e = d3.select(this);
-    //     e.classed('visible', !e.classed('visible'));
-    //     visible[i] = e.classed('visible');
+    var menu = d3.select('#chart1')
+      .append('div')
+      .classed('menu', true)
+      .selectAll('div.item')
+      .data(data1)
+      .enter()
+      .append('div')
+      .classed('item visible', true)
+      .text(function(d, i) {return 'Series ' + i;})
+      .on('click', function(d, i) {
+        var e = d3.select(this);
+        e.classed('visible', !e.classed('visible'));
+        visible[i] = e.classed('visible');
 
-    //   stackedBar
-    //     .seriesVisible(visible);
+      groupedBar
+        .seriesVisible(visible);
 
-    //   container
-    //     .call(stackedBar);
-    //   });
+      container
+        .call(groupedBar);
+      });
 
     }
 
@@ -60,9 +61,9 @@
     ];
     // var visible = [true, true, true];
 
-    var stackedBar = animdata.d3.stackedBar()
+    var groupedBar = animdata.d3.groupedBar()
       .accessor(function(d) {return d.value;})
-      .barWidth(15)
+      .groupWidth(50)
       .domain([-10, 10])
       .range([-100, 100])
       .colors(['steelblue', 'orange', 'green'])
@@ -78,7 +79,7 @@
     container
       .classed('bar', true)
       .datum(data1)
-      .call(stackedBar);
+      .call(groupedBar);
 
     container
       .selectAll('rect')

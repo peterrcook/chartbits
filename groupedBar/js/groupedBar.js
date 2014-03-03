@@ -13,7 +13,7 @@ var animdata = window.animdata || {};
 window.animdata = animdata;
 
 animdata.d3 = animdata.d3 || {};
-animdata.d3.stackedBar = function() {
+animdata.d3.groupedBar = function() {
 
   /*----
   Configurable variables
@@ -21,7 +21,7 @@ animdata.d3.stackedBar = function() {
   var config = {
     accessor: function(d) {return d;},
     datumAccessor: function(d) {return d;},
-    barWidth: 10,
+    groupWidth: 10,
     transform: {x: 11, y: 0},
     domain: null,
     range: [-50, 50],
@@ -36,7 +36,9 @@ animdata.d3.stackedBar = function() {
   Internal variables
   ----*/
   var data = null;
-  var layerData = null;
+  var barWidths = [];
+  var offsets = [];
+  // var groupData = null;
   var constructed = false;
   var scale = null;
 
@@ -70,12 +72,12 @@ animdata.d3.stackedBar = function() {
   ----*/
   function barGeometry(d, i, j) {
     d = config.accessor(d);
-    var x = i * config.transform.x + j * config.barWidth;
+    var x = i * config.transform.x + offsets[j];
     var y = i * config.transform.y;
     var width = 0, height = 0;
 
     // Vertical bars
-    width = config.barWidth;
+    width = barWidths[j];
     height = Math.abs(scale(0) - scale(d));
 
     if(d > 0) {
@@ -130,7 +132,29 @@ animdata.d3.stackedBar = function() {
       .each(barGeometry);
   }
 
+  function updateWidths() {
+    // Compute bar widths according to visibility
+    if(!config.seriesVisible)
+      config.seriesVisible = _.map(data, function() {return true;});
 
+    var numVisible = _.filter(config.seriesVisible, function(d) {return d;}).length;
+    var barWidth = config.groupWidth / numVisible;
+
+    // console.log(numVisible, barWidth);
+
+    barWidths = []; offsets = [];
+    var leftOffset = 0;
+
+    _.each(data, function(d, i) {
+      // console.log(d);
+      var width = config.seriesVisible[i] ? barWidth : 0;
+      barWidths.push(width);
+      offsets.push(leftOffset);
+      leftOffset += width;
+    });
+
+    // console.log(barWidths, offsets);
+  }
 
   /*----
   Main chart function
@@ -141,12 +165,7 @@ animdata.d3.stackedBar = function() {
     data = config.datumAccessor(d3elements.container.datum());
 
     // console.log(data);
-
-    // Construct the chart if this is first call
-    // if(!constructed) {
-    //   constructChart();
-    // }
-
+    updateWidths();
     update();
 
     constructed = true;

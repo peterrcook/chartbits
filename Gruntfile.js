@@ -1,10 +1,8 @@
 module.exports = function(grunt){
 
-    grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
-        jshint: {
-          files: ['bar/js/bar.js',
+    var files = ['bar/js/bar.js',
                   'connectedLabels/js/connectedLabels.js',
+                  'groupedBar/js/groupedBar.js',
                   'layerMenu/js/layerMenu.js',
                   'legend/js/legend.js',
                   'line/js/line.js',
@@ -15,7 +13,12 @@ module.exports = function(grunt){
                   'stackedBar/js/stackedBar.js',
                   'toolTip/js/toolTip.js',
                   'treeMap/js/treeMap.js',
-                  'yearsAxis/js/yearsAxis.js']
+                  'yearsAxis/js/yearsAxis.js'];
+
+    grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+        jshint: {
+          files: files
         },
         uglify: {
             options: {
@@ -23,21 +26,7 @@ module.exports = function(grunt){
             },
             build: {
                 files: {
-                    'build/js/chartbits.min.js': [
-                      'bar/js/bar.js',
-                      'connectedLabels/js/connectedLabels.js',
-                      'layerMenu/js/layerMenu.js',
-                      'legend/js/legend.js',
-                      'line/js/line.js',
-                      'lineTooltip/js/lineTooltip.js',
-                      'multiLine/js/multiLine.js',
-                      'multiLineTooltip/js/multiLineTooltip.js',
-                      'quartersAxis/js/quartersAxis.js',
-                      'stackedBar/js/stackedBar.js',
-                      'toolTip/js/toolTip.js',
-                      'treeMap/js/treeMap.js',
-                      'yearsAxis/js/yearsAxis.js'
-                    ]
+                    'build/js/chartbits.min.js': files
                 }
             }
         }
