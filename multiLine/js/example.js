@@ -2,7 +2,7 @@
 
   function chart1() {
     var data1 = [
-      [4, 1, -2, -3],
+      [1, 2, 3, 4],
       [10, 60, 40, -40],
       [500, -200, -300, 0]
     ];
@@ -10,7 +10,7 @@
 
     var line = animdata.d3.multiLine()
       .xStep(50)
-      .domains([[-10, 10], [-100, 100], [-1000, 1000]])
+      .domains([[1, 4], [-40, 60], [-400, 600]])
       .range([-100, 100])
       .seriesVisible([true, true, true])
       .colors(['steelblue', 'orange', 'green']);

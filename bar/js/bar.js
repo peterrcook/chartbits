@@ -14,6 +14,7 @@ animdata.d3.bar = function() {
   ----*/
   var config = {
     datumAccessor: function(d) {return d;},
+    accessor: function(d) {return d;},
     barWidth: 10,
     transform: {x: 11, y: 0},
     orientation: 'vertical',
@@ -23,6 +24,7 @@ animdata.d3.bar = function() {
     showValues: false,
     valueLabelSize: 10,
     signColors: null, // colour -ve and +ve differently e.g. ['red', 'green']
+    color: null
   };
 
 
@@ -60,7 +62,7 @@ animdata.d3.bar = function() {
   Chart update (D3 stuff)
   ----*/
   function barGeometry(d, i) {
-    // d = config.accessor(d);
+    d = config.accessor(d);
     var x, y, width, height;
     var myScale = scale ? scale : scales[i];
     if(config.orientation === 'horizontal') {
@@ -139,9 +141,11 @@ animdata.d3.bar = function() {
 
     u.each(barGeometry)
       .style('fill', function(d) {
-        if(!config.signColors)
-          return;
-        return d > 0 ? config.signColors[1] : config.signColors[0];
+        if(config.signColors)
+          return d > 0 ? config.signColors[1] : config.signColors[0];
+        if(config.color)
+          return config.color;
+        return '';
       });
 
     if(config.showValues)
