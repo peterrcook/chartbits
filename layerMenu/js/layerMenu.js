@@ -15,7 +15,8 @@ animdata.d3.layerMenu = function() {
   ----*/
   var config = {
     items: [], // [{label: '', layerSelector: ''}]
-    transitionDuration: 500
+    transitionDuration: 500,
+    initialSelection: 0,
   }
 
 
@@ -40,7 +41,7 @@ animdata.d3.layerMenu = function() {
     // To make things simpler, we assume just one element in the selection
     d3elements.container = d3.select(s[0][0]);
 
-    uiState.selectedLayer = config.items[0].layerSelector;
+    uiState.selectedLayer = config.items[config.initialSelection].layerSelector;
   }
 
 
