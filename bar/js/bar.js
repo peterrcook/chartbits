@@ -66,6 +66,9 @@ animdata.d3.bar = function() {
     var x, y, width, height;
     var myScale = scale ? scale : scales[i];
     if(config.orientation === 'horizontal') {
+      x = i * config.transform.x;
+      y = i * config.transform.y;
+
       width = 0;
       if(!isNaN(d)) {
         width = Math.abs(myScale(d));
@@ -75,9 +78,6 @@ animdata.d3.bar = function() {
         x -= width;
 
       height = config.barWidth;
-
-      x = i * config.transform.x;
-      y = i * config.transform.y;
     } else {
       x = i * config.transform.x;
 
