@@ -7,7 +7,8 @@ body {
 
 #menu div.item {
   float: left;
-  width: 50px;
+  width: 100px;
+  height: 35px;
   padding: 5px 10px;
   border: 1px solid #eee;
 }
@@ -22,7 +23,7 @@ body {
 
 #charts {
   position: absolute;
-  top: 30px;
+  top: 40px;
 }
 
 #charts .chart {

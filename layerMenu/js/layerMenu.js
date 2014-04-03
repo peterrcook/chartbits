@@ -57,6 +57,11 @@ animdata.d3.layerMenu = function() {
       .append('div')
       .classed('item', true)
       .style('cursor', 'pointer')
+      .style('display', 'table')
+      .append('p')
+      .style('display', 'table-cell')
+      .style('text-align', 'center')
+      .style('vertical-align', 'middle')
       .text(function(d) {return d.label;});
   }
 
