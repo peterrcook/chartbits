@@ -22,6 +22,7 @@ animdata.d3.bar = function() {
     domains: null,  // allows different domain for each data point
     range: [-50, 50],
     showValues: false,
+    valueSide: 'right',
     valueLabelSize: 10,
     signColors: null, // colour -ve and +ve differently e.g. ['red', 'green']
     color: null
@@ -101,10 +102,11 @@ animdata.d3.bar = function() {
   }
 
   function valueLabelGeometry(d, i) {
-    var x, y;
+    var x, y, anchor;
     if(config.orientation === 'horizontal') {
-      x = i * config.transform.x + 3;
+      x = i * config.transform.x + (config.valueSide === 'right' ? 3 : -3);
       y = i * config.transform.y + 0.5 * (config.barWidth + 0.8 * config.valueLabelSize);
+      anchor = config.valueSize === 'right' ? 'start' : 'end';
       // if(!isNaN(d) && d > 0) {
       //   if(scale)
       //     x += Math.abs(scale(d));
@@ -117,7 +119,8 @@ animdata.d3.bar = function() {
 
     d3.select(this)
       .attr('x', x)
-      .attr('y', y);
+      .attr('y', y)
+      .style('text-anchor', anchor);
   }
 
   function update() {

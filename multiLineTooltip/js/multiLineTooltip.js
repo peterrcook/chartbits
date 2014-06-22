@@ -209,9 +209,10 @@ animdata.d3.multiLineTooltip = function() {
         return config.seriesVisible[i] ? 'block' : 'none';
       })
       .html(function(d, i) {
-        var ret = config.seriesNames[i] + ': ';
+        var ret = '<span class="key">' + config.seriesNames[i] + ':</span> <span class="value">';
         ret += d[uiState.i];
         ret += config.units[i];
+        ret += '</span>';
         return ret;
       });
   }

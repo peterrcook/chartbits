@@ -10,7 +10,8 @@
       .range([-50, 50])
       .orientation('horizontal')
       .transform(transform)
-      .showValues(true);
+      .showValues(true)
+      .valueSide('left');
 
     var container = d3.select('#chart1')
       .append('svg')

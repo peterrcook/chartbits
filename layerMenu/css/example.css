@@ -7,10 +7,12 @@ body {
 
 #menu div.item {
   float: left;
-  width: 100px;
-  height: 35px;
   padding: 5px 10px;
   border: 1px solid #eee;
+}
+#menu div.item div {
+  height: 35px;
+  width: 100px;
 }
 
 #menu div.item.selected {

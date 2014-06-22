@@ -57,6 +57,7 @@ animdata.d3.layerMenu = function() {
       .append('div')
       .classed('item', true)
       .style('cursor', 'pointer')
+      .append('div')
       .style('display', 'table')
       .append('p')
       .style('display', 'table-cell')
