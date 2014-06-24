@@ -149,8 +149,46 @@
 
   }
 
+  function construct4() {
+    var data = [];
+    var width = 500;
+    var height = 300;
+
+    for(var i=0; i<10; i++) {
+      data.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 50,
+        data1: Math.random() * 50,
+        data2: Math.random() * 50,
+        data3: Math.random() * 50,
+      });
+    }
+
+    d3.select('#charts .chart4 svg')
+      .selectAll('circle')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('cx', function(d) {return d.x;})
+      .attr('cy', function(d) {return d.y;})
+      .attr('r', function(d) {return d.r;});
+
+    var toolTip = animdata.d3.toolTip()
+      .title('Circle')
+      .templateFunc(function(d) {
+        console.log(d);
+        return '<div>data1 = ' + d.data1 + '</div>';
+      })
+      .element('circle');
+
+    d3.select('#charts .chart4')
+      .call(toolTip);
+  }
+
 
   construct1();
   construct2();
   construct3();
+  construct4();
 })();

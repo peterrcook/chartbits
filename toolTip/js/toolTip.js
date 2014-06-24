@@ -19,6 +19,7 @@ animdata.d3.toolTip = function() {
     offset: {x: 10, y: 10},
     template: null,
     templates: null, // allows different templates on different elements
+    templateFunc: null, // allow template function
     title: null, // if no template specified, defines the title. If not a data property, display the string
     fields: null, // if no template specified, list the specified fields
     freezeOnClick: false,
@@ -208,7 +209,11 @@ animdata.d3.toolTip = function() {
 
     d3elements.tooltip.html('');
 
-    if(templates) {
+    if(config.templateFunc) {
+      d3elements.tooltip
+        .html(config.templateFunc(datum));
+    }
+    else if(templates) {
       var i = uiState.hoverElement.attr('data-tooltip-template');
       // console.log(i, templates, templates[i]);
       d3elements.tooltip
