@@ -132,6 +132,7 @@ animdata.d3.toolTip = function() {
         d3elements.tooltip
           .transition()
           .style('opacity', '0');
+        d3.event.stopPropagation();
       });
 
     d3elements.elements
@@ -143,6 +144,7 @@ animdata.d3.toolTip = function() {
           .transition()
          .style('opacity', '1');
         updateContent();
+        d3.event.stopPropagation();
       })
       .on('mouseout.tooltipComponent', function() {
         if(uiState.frozen)
@@ -151,6 +153,7 @@ animdata.d3.toolTip = function() {
           .transition()
           .style('opacity', '0');
         uiState.hoverElement = null;
+        d3.event.stopPropagation();
       })
       .on('click.tooltipComponent', function(d) {
         if(!config.freezeOnClick)

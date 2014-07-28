@@ -177,7 +177,6 @@
     var toolTip = animdata.d3.toolTip()
       .title('Circle')
       .templateFunc(function(d) {
-        console.log(d);
         return '<div>data1 = ' + d.data1 + '</div>';
       })
       .element('circle');
@@ -186,9 +185,36 @@
       .call(toolTip);
   }
 
+  function construct5() {
+    var data = [
+      {value: 20}, 
+      {value: 40}, 
+      {value: 30},
+      {value: 20}
+    ];
+
+    d3.select('#charts .chart5')
+      .selectAll('div.item')
+      .data(data)
+      .enter()
+      .append('div')
+      .classed('item', true)
+      .text(function(d) {return d.value;});
+
+    var toolTip = animdata.d3.toolTip()
+      .title('HTML div element')
+      .templateFunc(function(d) {
+        return '<div>value = ' + d.value + '</div>';
+      })
+      .element('div');
+
+    d3.select('#charts .chart5')
+      .call(toolTip);
+  }
 
   construct1();
   construct2();
   construct3();
   construct4();
+  construct5();
 })();
