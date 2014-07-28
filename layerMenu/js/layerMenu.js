@@ -17,6 +17,7 @@ animdata.d3.layerMenu = function() {
     items: [], // [{label: '', layerSelector: ''}]
     transitionDuration: 500,
     initialSelection: 0,
+    clickHandler: null,
   }
 
 
@@ -76,6 +77,8 @@ animdata.d3.layerMenu = function() {
       .on('click', function(d) {
         uiState.selectedLayer = d.layerSelector;
         update();
+        if(config.clickHandler !== null)
+          config.clickHandler(d);
       });
   }
 
