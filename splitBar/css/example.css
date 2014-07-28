@@ -1,0 +1,15 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	width: 1200px;
+	margin: 0 auto;
+	font-size: 14px;
+}
+
+line {
+  stroke: #ccc;
+}
+
+rect {
+  stroke: none;
+  fill: steelblue;
+}

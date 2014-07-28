@@ -10,6 +10,7 @@ module.exports = function(grunt){
                   'multiLine/js/multiLine.js',
                   'multiLineTooltip/js/multiLineTooltip.js',
                   'quartersAxis/js/quartersAxis.js',
+                  'splitBar/js/splitBar.js',
                   'stackedBar/js/stackedBar.js',
                   'toolTip/js/toolTip.js',
                   'treeMap/js/treeMap.js',
