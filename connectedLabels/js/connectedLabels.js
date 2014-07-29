@@ -137,7 +137,7 @@ animdata.d3.connectedLabels = function() {
       .style('right', function(d) {return d.connectorSide === 'right' ? containerWidth - d.labelPosition.x + 'px' : null;})
       .style('top', function(d) {return d.labelPosition.y - 0.5 * config.fontSize + 'px';})
       .style('font-size', config.fontSize + 'px')
-      .attr('class', function(d, i) {return 'label-group group-'+i;});
+      .attr('class', function(d, i) {return 'label-group group-'+i+' '+d.connectorSide;});
 
     labelGroups
       .each(labelList);
